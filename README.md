@@ -1,3 +1,1 @@
-﻿# MERN E-Commerce Store 👇
-
-(/thumb.png)
+﻿# MERN E-Commerce Store
