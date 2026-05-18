@@ -60,7 +60,7 @@ await Product.insertMany([
   },
   {
     name: "Samsung Galaxy S24",
-    image: "https://images.unsplash.com/photo-1706721983499-7b4b2c1a14e5?w=500",
+    image: "https://unsplash.com/photos/a-person-holding-a-samsung-phone-in-their-hand-vjgTcqbajS4",
     brand: "Samsung",
     quantity: 1,
     category: electronics._id,

@@ -1,4 +1,6 @@
-import Chart from "react-apexcharts";
+import ApexCharts from "apexcharts";
+import ReactApexChart from "react-apexcharts";
+const Chart = ReactApexChart;
 import { useGetUsersQuery } from "../../redux/api/usersApiSlice";
 import {
   useGetTotalOrdersQuery,
