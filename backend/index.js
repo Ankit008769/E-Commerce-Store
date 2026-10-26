@@ -14,7 +14,10 @@ import uploadRoutes from "./routes/uploadRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 
 dotenv.config();
-const port = process.env.PORT || 5000;
+if (!process.env.MONGO_URI || !process.env.JWT_SECRET || process.env.JWT_SECRET === 'replace-with-a-long-random-secret') {
+  throw new Error('Configure MONGO_URI and a private JWT_SECRET in .env before starting CampusCart.');
+}
+const port = process.env.PORT || 5010;
 
 await connectDB();
 const recovered=await recoverCheckouts();

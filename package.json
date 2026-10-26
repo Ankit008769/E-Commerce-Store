@@ -1,7 +1,7 @@
 {
   "name": "MERN e-commerce",
   "version": "1.0.0",
-  "description": "MERN Stack E-Commerce Project",
+  "description": "CampusCart - NIT Hamirpur multi-shop COD marketplace",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -9,7 +9,10 @@
     "frontend": "npm run dev --prefix frontend",
     "dev": "concurrently \"npm run frontend\" \"npm run backend\"",
     "test": "node --test backend/tests/*.test.js",
-    "superadmin": "node backend/utils/promoteSuperAdmin.js"
+    "superadmin": "node backend/utils/promoteSuperAdmin.js",
+    "start": "node backend/index.js",
+    "build": "npm run build --prefix frontend",
+    "verify": "npm run build && npm test"
   },
   "keywords": [],
   "author": "HuXn WebDev",
