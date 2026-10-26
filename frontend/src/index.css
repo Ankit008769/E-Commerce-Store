@@ -11,3 +11,5 @@
 
 
 .site-header nav>a.button{color:white}
+
+.workspace-content>.section-heading{flex-wrap:wrap}.workspace-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.workspace-actions button{white-space:nowrap}.accounts-filter{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:0 0 16px}.accounts-filter label{min-width:220px;margin:0}.accounts-filter p{margin:0 0 12px}

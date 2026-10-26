@@ -2,6 +2,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import './quick-commerce.css';
 import App from './App.jsx';
+import SessionBoundary from './components/SessionBoundary';
 import {Provider} from 'react-redux';
 import store from './redux/store';
 import {createBrowserRouter,RouterProvider,Navigate,useParams} from 'react-router-dom';
@@ -29,4 +30,4 @@ const router=createBrowserRouter([{element:<App/>,children:[
  {path:'/admin',element:<AdminRoute/>,children:[{index:true,element:<Navigate to="dashboard" replace/>},{path:':section',element:<AdminDashboard/>},{path:'product/update/:id',element:<Navigate to="/admin/products" replace/>}]},
  {path:'*',element:<div className="empty-state"><h1>Page not found</h1><a href="/">Back to the shop</a></div>}
 ]}]);
-ReactDOM.createRoot(document.getElementById('root')).render(<Provider store={store}><RouterProvider router={router}/></Provider>);
+ReactDOM.createRoot(document.getElementById('root')).render(<Provider store={store}><SessionBoundary><RouterProvider router={router}/></SessionBoundary></Provider>);

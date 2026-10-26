@@ -51,6 +51,12 @@ test('API permissions, per-shop COD pricing, blacklisting and idempotent deliver
  assert.equal((await call(buyer,'/api/users/profile','PUT',{username:'Test Customer',email:buyer.email})).status,200);
  console.log('PASS official campus domain, normalization, spoof rejection and profile bypass protection');
  r=await call(admin,'/api/users');check('Administrator cannot read private policies/accounts',()=>assert.equal(r.status,403));
+ for(const actor of [admin,shop,buyer]){assert.equal((await call(actor,'/api/users/'+sa._id,'DELETE')).status,403);assert.equal((await call(actor,'/api/users/'+sa._id,'PUT',{status:'blacklisted'})).status,403);}
+ assert.equal((await call(sa,'/api/users/'+sa._id,'DELETE')).status,403);
+ const tempAdmin=await User.create({username:'Removable Administrator',email:'removable@test.local',password,role:'administrator'});
+ assert.equal((await call(sa,'/api/users/'+tempAdmin._id,'DELETE')).status,200);assert.equal((await User.findById(tempAdmin._id)).status,'removed');
+ assert.equal((await call(tempAdmin,'/api/users/profile')).status,403);
+ console.log('PASS Super Admin protected; only Super Admin removes administrators, revoked sessions denied');
  r=await call(shop,'/api/users/'+shop._id,'PUT',{deliveryPolicy:{deliveryCharge:0}});check('shopkeeper cannot change delivery policy',()=>assert.equal(r.status,403));
  r=await call(sa,'/api/users/'+shop._id,'PUT',{deliveryPolicy:{latePenalty:-1}});check('negative penalties rejected',()=>assert.equal(r.status,400));
  r=await call(shop,'/api/products/'+p2._id,'DELETE');check('cross-shop product deletion rejected',()=>assert.equal(r.status,403));
@@ -65,6 +71,7 @@ test('API permissions, per-shop COD pricing, blacklisting and idempotent deliver
  r=await call(buyer,'/api/orders','POST',{...payload,paymentMethod:'PayPal'});check('online payment rejected',()=>assert.equal(r.status,400));
  r=await call(buyer,'/api/orders','POST',payload);assert.equal(r.status,201);const id=r.data._id;
  check('COD order stores shop groups without leaking penalties',()=>{assert.equal(r.data.totalPrice,530);assert.equal(r.data.shopOrders[0].latePenalty,undefined);});
+ const ownHistory=await call(buyer,'/api/orders/mine'),otherHistory=await call(other,'/api/orders/mine');assert(ownHistory.data.some(o=>o._id===id));assert.equal(otherHistory.data.length,0);console.log('PASS customer order history remains scoped to the purchasing account');
  assert.equal((await Product.findById(p._id)).countInStock,8);console.log('PASS stock reserved');
  r=await call(other,'/api/orders/'+id);check('other customer cannot read order',()=>assert.equal(r.status,403));
  r=await call(shop,'/api/orders/'+id);check('shop only receives its items and total',()=>{assert.equal(r.data.shopOrders.length,1);assert.equal(r.data.totalPrice,230);assert.equal(r.data.orderItems.length,1);assert.equal(r.data.shopOrders[0].deduction,undefined);});
