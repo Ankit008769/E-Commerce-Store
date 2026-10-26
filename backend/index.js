@@ -1,6 +1,7 @@
 import {recoverCheckouts} from './utils/checkoutRecovery.js';
 // packages
 import path from "path";
+import mongoose from "mongoose";
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
@@ -29,6 +30,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.get('/api/health', (req,res) => {
+  const ready=mongoose.connection.readyState===1;
+  res.status(ready?200:503).json({status:ready?'ok':'unavailable'});
+});
 app.use("/api/users", userRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/products", productRoutes);
