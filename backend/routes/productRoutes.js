@@ -1,40 +1,11 @@
-import express from "express";
-import formidable from "express-formidable";
-const router = express.Router();
-
-// controllers
-import {
-  addProduct,
-  updateProductDetails,
-  removeProduct,
-  fetchProducts,
-  fetchProductById,
-  fetchAllProducts,
-  addProductReview,
-  fetchTopProducts,
-  fetchNewProducts,
-  filterProducts,
-} from "../controllers/productController.js";
-import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
-import checkId from "../middlewares/checkId.js";
-
-router
-  .route("/")
-  .get(fetchProducts)
-  .post(authenticate, authorizeAdmin, formidable(), addProduct);
-
-router.route("/allproducts").get(fetchAllProducts);
-router.route("/:id/reviews").post(authenticate, checkId, addProductReview);
-
-router.get("/top", fetchTopProducts);
-router.get("/new", fetchNewProducts);
-
-router
-  .route("/:id")
-  .get(fetchProductById)
-  .put(authenticate, authorizeAdmin, formidable(), updateProductDetails)
-  .delete(authenticate, authorizeAdmin, removeProduct);
-
-router.route("/filtered-products").post(filterProducts);
-
-export default router;
+import express from 'express';
+import formidable from 'express-formidable';
+import * as c from '../controllers/productController.js';
+import {authenticate,authorizeStaff} from '../middlewares/authMiddleware.js';
+const r=express.Router();
+r.route('/').get(c.fetchProducts).post(authenticate,authorizeStaff,formidable(),c.addProduct);
+r.get('/manage',authenticate,authorizeStaff,c.manageProducts);r.get('/allproducts',c.fetchAllProducts);r.get('/top',c.fetchTopProducts);r.get('/new',c.fetchNewProducts);
+r.post('/filtered-products',c.filterProducts);r.post('/:id/reviews',authenticate,c.addProductReview);
+r.get('/:id/recommendations',c.fetchRecommendations);
+r.route('/:id').get(c.fetchProductById).put(authenticate,authorizeStaff,formidable(),c.updateProductDetails).delete(authenticate,authorizeStaff,c.removeProduct);
+export default r;

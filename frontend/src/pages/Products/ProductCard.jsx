@@ -1,87 +1,20 @@
-import { Link } from "react-router-dom";
-import { AiOutlineShoppingCart } from "react-icons/ai";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../../redux/features/cart/cartSlice";
-import { toast } from "react-toastify";
-import HeartIcon from "./HeartIcon";
-
-const ProductCard = ({ p }) => {
-  const dispatch = useDispatch();
-
-  const addToCartHandler = (product, qty) => {
-    dispatch(addToCart({ ...product, qty }));
-    toast.success("Item added successfully", {
-      position: toast.POSITION.TOP_RIGHT,
-      autoClose: 2000,
-    });
-  };
-
-  return (
-    <div className="max-w-sm relative bg-[#1A1A1A] rounded-lg shaodw dark:bg-gray-800 dark:border-gray-700">
-      <section className="relative">
-        <Link to={`/product/${p._id}`}>
-          <span className="absolute bottom-3 right-3 bg-pink-100 text-pink-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-pink-900 dark:text-pink-300">
-            {p?.brand}
-          </span>
-          <img
-            className="cursor-pointer w-full"
-            src={p.image}
-            alt={p.name}
-            style={{ height: "170px", objectFit: "cover" }}
-          />
-        </Link>
-        <HeartIcon product={p} />
-      </section>
-
-      <div className="p-5">
-        <div className="flex justify-between">
-          <h5 className="mb-2 text-xl text-whiet dark:text-white">{p?.name}</h5>
-
-          <p className="text-black font-semibold text-pink-500">
-            {p?.price?.toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-            })}
-          </p>
-        </div>
-
-        <p className="mb-3 font-normal text-[#CFCFCF]">
-          {p?.description?.substring(0, 60)} ...
-        </p>
-
-        <section className="flex justify-between items-center">
-          <Link
-            to={`/product/${p._id}`}
-            className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-pink-700 rounded-lg hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-pink-300 dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800"
-          >
-            Read More
-            <svg
-              className="w-3.5 h-3.5 ml-2"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 10"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M1 5h12m0 0L9 1m4 4L9 9"
-              />
-            </svg>
-          </Link>
-
-          <button
-            className="p-2 rounded-full"
-            onClick={() => addToCartHandler(p, 1)}
-          >
-            <AiOutlineShoppingCart size={25} />
-          </button>
-        </section>
-      </div>
+import {Link} from 'react-router-dom';
+import {useDispatch,useSelector} from 'react-redux';
+import {addToCart,removeFromCart} from '../../redux/features/cart/cartSlice';
+import {addToFavorites,removeFromFavorites} from '../../redux/features/favorites/favoriteSlice';
+import {addFavoriteToLocalStorage,removeFavoriteFromLocalStorage} from '../../Utils/localStorage';
+import {money} from '../../Utils/marketplace';
+export default function ProductCard({p}) {
+  const dispatch=useDispatch(), favorites=useSelector(s=>s.favorites), cart=useSelector(s=>s.cart.cartItems);
+  const saved=favorites.some(i=>i._id===p._id), qty=Number(cart.find(i=>i._id===p._id)?.qty||0);
+  const label=p.name||'Shop item', policy=p.shopkeeper?.deliveryPolicy;
+  const save=()=>{if(saved){dispatch(removeFromFavorites(p));removeFavoriteFromLocalStorage(p._id);}else{dispatch(addToFavorites(p));addFavoriteToLocalStorage(p);}};
+  const change=n=>n<=0?dispatch(removeFromCart(p._id)):dispatch(addToCart({...p,qty:n}));
+  return <article className="product-card">
+    <div className="product-image"><Link to={'/product/'+p._id}><img src={p.image} alt={label} loading="lazy" onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src="/product-placeholder.svg";}}/></Link><button className={'save-button '+(saved?'saved':'')} onClick={save} aria-label={(saved?'Unsave ':'Save ')+label}>{saved?'♥':'♡'}</button>{!p.countInStock&&<span className="stock-badge">Sold out</span>}</div>
+    <div className="product-info"><span className="delivery-chip">◷ {policy?.deliveryMinutes?policy.deliveryMinutes+' MINS':'LOCAL DELIVERY'}</span><Link to={'/product/'+p._id}><h3>{label}</h3></Link><span className="shop-label">{p.shopkeeper?.shopName||p.shopkeeper?.username||'Local shop'}</span>
+      <div className="product-bottom"><strong>{money(p.price)}</strong>{qty?<div className="quantity-control" aria-label={'Quantity for '+label}><button onClick={()=>change(qty-1)} aria-label={'Remove one '+label}>−</button><span aria-live="polite">{qty}</span><button disabled={qty>=p.countInStock} onClick={()=>change(qty+1)} aria-label={'Add one '+label}>+</button></div>:<button className="add-button" disabled={!p.countInStock} onClick={()=>change(1)} aria-label={'Add '+label}>ADD</button>}</div>
+      <p className="delivery-note">{policy?.deliveryCharge?money(policy.deliveryCharge)+' delivery · free from '+money(policy.minimumOrder):'Free delivery'}</p>
     </div>
-  );
-};
-
-export default ProductCard;
+  </article>;
+}

@@ -1,0 +1,666 @@
+{
+  "booth4@campuscart.local:Aloo Tikki Burger": {
+    "image": "/uploads/menu-food/burger.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Andy Li; CC0. Source: https://commons.wikimedia.org/wiki/File:Fancy_Veggie_Burger_and_Fries_-_Joe%27s_Burger_House_2024-07-07.jpg License: http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  "booth4@campuscart.local:Crispy Veg Burger": {
+    "image": "/uploads/menu-food/burger.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Andy Li; CC0. Source: https://commons.wikimedia.org/wiki/File:Fancy_Veggie_Burger_and_Fries_-_Joe%27s_Burger_House_2024-07-07.jpg License: http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  "booth4@campuscart.local:Crispy Paneer Burger": {
+    "image": "/uploads/menu-food/burger.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Andy Li; CC0. Source: https://commons.wikimedia.org/wiki/File:Fancy_Veggie_Burger_and_Fries_-_Joe%27s_Burger_House_2024-07-07.jpg License: http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  "booth4@campuscart.local:Cheesy Burger": {
+    "image": "/uploads/menu-food/burger.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Andy Li; CC0. Source: https://commons.wikimedia.org/wiki/File:Fancy_Veggie_Burger_and_Fries_-_Joe%27s_Burger_House_2024-07-07.jpg License: http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  "booth4@campuscart.local:Veg Burger": {
+    "image": "/uploads/menu-food/burger.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Andy Li; CC0. Source: https://commons.wikimedia.org/wiki/File:Fancy_Veggie_Burger_and_Fries_-_Joe%27s_Burger_House_2024-07-07.jpg License: http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  "booth4@campuscart.local:Veg Wrap": {
+    "image": "/uploads/menu-food/wrap.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Andy Li; CC0. Source: https://commons.wikimedia.org/wiki/File:Vegetable_Wrap_(toasted)_-_The_naan_hut_2023-12-22.jpg License: http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  "booth4@campuscart.local:Paneer Wrap": {
+    "image": "/uploads/menu-food/wrap.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Andy Li; CC0. Source: https://commons.wikimedia.org/wiki/File:Vegetable_Wrap_(toasted)_-_The_naan_hut_2023-12-22.jpg License: http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  "booth4@campuscart.local:Makhani Wrap": {
+    "image": "/uploads/menu-food/wrap.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Andy Li; CC0. Source: https://commons.wikimedia.org/wiki/File:Vegetable_Wrap_(toasted)_-_The_naan_hut_2023-12-22.jpg License: http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  "booth4@campuscart.local:French Fries Normal": {
+    "image": "/uploads/menu-food/fries.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Chris Woodrich; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Cajun_fries_from_Popeyes_Louisiana_Kitchen,_Stratford,_Ontario,_2025-08-04.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Peri Peri Fries": {
+    "image": "/uploads/menu-food/fries.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Chris Woodrich; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Cajun_fries_from_Popeyes_Louisiana_Kitchen,_Stratford,_Ontario,_2025-08-04.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Cheesy Fries": {
+    "image": "/uploads/menu-food/cheese-fries.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: David Goehring; CC BY 2.0. Source: https://commons.wikimedia.org/wiki/File:Cheese_Fries.jpg License: https://creativecommons.org/licenses/by/2.0"
+  },
+  "booth4@campuscart.local:Honey Chilly Potato": {
+    "image": "/uploads/menu-food/chilli-potato.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Gannu03; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Honey_chilli_potato_2.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Veg. Grill Sandwich": {
+    "image": "/uploads/menu-food/sandwich.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Shixart1985; CC BY 2.0. Source: https://commons.wikimedia.org/wiki/File:A_fresh_sandwich_filled_with_grilled_vegetables.jpg License: https://creativecommons.org/licenses/by/2.0"
+  },
+  "booth4@campuscart.local:Cheesy Grilled Sandwich": {
+    "image": "/uploads/menu-food/sandwich.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Shixart1985; CC BY 2.0. Source: https://commons.wikimedia.org/wiki/File:A_fresh_sandwich_filled_with_grilled_vegetables.jpg License: https://creativecommons.org/licenses/by/2.0"
+  },
+  "booth4@campuscart.local:Paneer Corn Sandwich": {
+    "image": "/uploads/menu-food/sandwich.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Shixart1985; CC BY 2.0. Source: https://commons.wikimedia.org/wiki/File:A_fresh_sandwich_filled_with_grilled_vegetables.jpg License: https://creativecommons.org/licenses/by/2.0"
+  },
+  "booth4@campuscart.local:White Sauce Pasta": {
+    "image": "/uploads/menu-food/white-pasta.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Sanika Dhumal; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:White_sauce_pasta.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Red Sauce Pasta": {
+    "image": "/uploads/menu-food/red-pasta.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: 10Rosso; CC BY 2.0. Source: https://commons.wikimedia.org/wiki/File:Pasta_al_pomodoro_2.jpg License: https://creativecommons.org/licenses/by/2.0"
+  },
+  "booth4@campuscart.local:Cheesy Garlic Bread": {
+    "image": "/uploads/menu-food/garlic-bread.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Infrogmation; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Garlic_bread_baguettes_2.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Stuffed Garlic Bread": {
+    "image": "/uploads/menu-food/garlic-bread.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Infrogmation; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Garlic_bread_baguettes_2.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Vanila Shake (Small)": {
+    "image": "/uploads/menu-food/vanilla-shake.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: jencu from bay area, usa; CC BY 2.0. Source: https://commons.wikimedia.org/wiki/File:Vanilla_milkshake_at_Lunchbox_Laboratories.jpg License: https://creativecommons.org/licenses/by/2.0"
+  },
+  "booth4@campuscart.local:Vanila Shake (Large)": {
+    "image": "/uploads/menu-food/vanilla-shake.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: jencu from bay area, usa; CC BY 2.0. Source: https://commons.wikimedia.org/wiki/File:Vanilla_milkshake_at_Lunchbox_Laboratories.jpg License: https://creativecommons.org/licenses/by/2.0"
+  },
+  "booth4@campuscart.local:Mango Shake (Small)": {
+    "image": "/uploads/menu-food/mango-shake.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Swathi sri srinivasa raghavan; CC0. Source: https://commons.wikimedia.org/wiki/File:Mango_milkshake.jpg License: http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  "booth4@campuscart.local:Mango Shake (Large)": {
+    "image": "/uploads/menu-food/mango-shake.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Swathi sri srinivasa raghavan; CC0. Source: https://commons.wikimedia.org/wiki/File:Mango_milkshake.jpg License: http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  "booth4@campuscart.local:Strawberry Shake (Small)": {
+    "image": "/uploads/menu-food/strawberry-shake.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Renee Comet (Photographer); Public domain. Source: https://commons.wikimedia.org/wiki/File:Strawberry_milk_shake_(cropped).jpg"
+  },
+  "booth4@campuscart.local:Strawberry Shake (Large)": {
+    "image": "/uploads/menu-food/strawberry-shake.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Renee Comet (Photographer); Public domain. Source: https://commons.wikimedia.org/wiki/File:Strawberry_milk_shake_(cropped).jpg"
+  },
+  "booth4@campuscart.local:Chocolate Shake (Small)": {
+    "image": "/uploads/menu-food/chocolate-shake.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Bernard DUPONT; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Chocolate_milkshake_..._%F0%9F%98%8B.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Chocolate Shake (Large)": {
+    "image": "/uploads/menu-food/chocolate-shake.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Bernard DUPONT; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Chocolate_milkshake_..._%F0%9F%98%8B.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Butter Scotch Shake (Small)": {
+    "image": "/uploads/menu-food/vanilla-shake.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: jencu from bay area, usa; CC BY 2.0. Source: https://commons.wikimedia.org/wiki/File:Vanilla_milkshake_at_Lunchbox_Laboratories.jpg License: https://creativecommons.org/licenses/by/2.0"
+  },
+  "booth4@campuscart.local:Butter Scotch Shake (Large)": {
+    "image": "/uploads/menu-food/vanilla-shake.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: jencu from bay area, usa; CC BY 2.0. Source: https://commons.wikimedia.org/wiki/File:Vanilla_milkshake_at_Lunchbox_Laboratories.jpg License: https://creativecommons.org/licenses/by/2.0"
+  },
+  "booth4@campuscart.local:Kitkat Shake (Small)": {
+    "image": "/uploads/menu-food/chocolate-shake.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Bernard DUPONT; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Chocolate_milkshake_..._%F0%9F%98%8B.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Kitkat Shake (Large)": {
+    "image": "/uploads/menu-food/chocolate-shake.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Bernard DUPONT; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Chocolate_milkshake_..._%F0%9F%98%8B.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Oreo Shake (Small)": {
+    "image": "/uploads/menu-food/chocolate-shake.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Bernard DUPONT; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Chocolate_milkshake_..._%F0%9F%98%8B.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Oreo Shake (Large)": {
+    "image": "/uploads/menu-food/chocolate-shake.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Bernard DUPONT; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Chocolate_milkshake_..._%F0%9F%98%8B.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Cold Coffee (Small)": {
+    "image": "/uploads/menu-food/cold-coffee.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Tony Webster; CC BY 2.0. Source: https://commons.wikimedia.org/wiki/File:Iced_Coffee_in_Glass_-_Sunshine_Coffee_-_Laramie_Cafe_(53838344552).jpg License: https://creativecommons.org/licenses/by/2.0"
+  },
+  "booth4@campuscart.local:Cold Coffee (Large)": {
+    "image": "/uploads/menu-food/cold-coffee.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Tony Webster; CC BY 2.0. Source: https://commons.wikimedia.org/wiki/File:Iced_Coffee_in_Glass_-_Sunshine_Coffee_-_Laramie_Cafe_(53838344552).jpg License: https://creativecommons.org/licenses/by/2.0"
+  },
+  "booth4@campuscart.local:Onion": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Capsicum": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Cheese Corn": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Onion + Capsicum": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Paneer + Onion": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Onion Jalapenos": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Paneer Capsicum": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Extra Cheese": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Steam Momos (Half)": {
+    "image": "/uploads/menu-food/momos.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: TAPAS KUMAR HALDER; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Steamed_Momos_-_KOLKATA.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Steam Momos (Full)": {
+    "image": "/uploads/menu-food/momos.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: TAPAS KUMAR HALDER; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Steamed_Momos_-_KOLKATA.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Fry Momos (Half)": {
+    "image": "/uploads/menu-food/fried-momos.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Thamizhpparithi Maari; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Fried_momos_of_Salem.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Fry Momos (Full)": {
+    "image": "/uploads/menu-food/fried-momos.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Thamizhpparithi Maari; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Fried_momos_of_Salem.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Paneer Momos (Half)": {
+    "image": "/uploads/menu-food/momos.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: TAPAS KUMAR HALDER; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Steamed_Momos_-_KOLKATA.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Paneer Momos (Full)": {
+    "image": "/uploads/menu-food/momos.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: TAPAS KUMAR HALDER; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Steamed_Momos_-_KOLKATA.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Chilly Garlic Momos (Half)": {
+    "image": "/uploads/menu-food/chilli-momos.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Medhi jyoti; CC BY 4.0. Source: https://commons.wikimedia.org/wiki/File:Chilli_Momo.jpg License: https://creativecommons.org/licenses/by/4.0"
+  },
+  "booth4@campuscart.local:Chilly Garlic Momos (Full)": {
+    "image": "/uploads/menu-food/chilli-momos.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Medhi jyoti; CC BY 4.0. Source: https://commons.wikimedia.org/wiki/File:Chilli_Momo.jpg License: https://creativecommons.org/licenses/by/4.0"
+  },
+  "booth4@campuscart.local:Spring Roll (Half)": {
+    "image": "/uploads/menu-food/spring-roll.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Srujanabotcha; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Golden_Vegetable_Spring_Rolls_Served_with_Dipping_Sauce.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Spring Roll (Full)": {
+    "image": "/uploads/menu-food/spring-roll.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Srujanabotcha; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Golden_Vegetable_Spring_Rolls_Served_with_Dipping_Sauce.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Double Cheese Margreta (Regular)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Double Cheese Margreta (Medium)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Double Cheese Margreta (Large)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Farm Fresh Choice (Regular)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Farm Fresh Choice (Medium)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Farm Fresh Choice (Large)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Spicy Delight (Regular)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Spicy Delight (Medium)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Spicy Delight (Large)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Makhni Paneer (Regular)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Makhni Paneer (Medium)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Makhni Paneer (Large)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Paneer Special (Regular)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Paneer Special (Medium)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Paneer Special (Large)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Deluxe Veggie (Regular)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Deluxe Veggie (Medium)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Deluxe Veggie (Large)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Black & White (Regular)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Black & White (Medium)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Black & White (Large)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Tandoori Pizza (Regular)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Tandoori Pizza (Medium)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Tandoori Pizza (Large)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Kadai Paneer (Regular)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Kadai Paneer (Medium)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Kadai Paneer (Large)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Veggie Supreme (Regular)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Veggie Supreme (Medium)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Veggie Supreme (Large)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Spicy Veg Hevan (Regular)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Spicy Veg Hevan (Medium)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Spicy Veg Hevan (Large)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:CPB Pizza (Regular)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:CPB Pizza (Medium)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:CPB Pizza (Large)": {
+    "image": "/uploads/menu-food/pizza.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Petar Milošević; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Veg Noodles (Half)": {
+    "image": "/uploads/menu-food/noodles.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: ANKAN; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetable_Chow_Mein_in_Shillong.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Veg Noodles (Full)": {
+    "image": "/uploads/menu-food/noodles.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: ANKAN; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetable_Chow_Mein_in_Shillong.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Hakka Noodles (Half)": {
+    "image": "/uploads/menu-food/noodles.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: ANKAN; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetable_Chow_Mein_in_Shillong.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Hakka Noodles (Full)": {
+    "image": "/uploads/menu-food/noodles.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: ANKAN; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetable_Chow_Mein_in_Shillong.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Paneer Noodle (Half)": {
+    "image": "/uploads/menu-food/noodles.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: ANKAN; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetable_Chow_Mein_in_Shillong.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Paneer Noodle (Full)": {
+    "image": "/uploads/menu-food/noodles.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: ANKAN; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetable_Chow_Mein_in_Shillong.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Manchurian (Half)": {
+    "image": "/uploads/menu-food/manchurian.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: PallaviKhale; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Hakka_Noodles,_Veg_Manchurian_PK009.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Manchurian (Full)": {
+    "image": "/uploads/menu-food/manchurian.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: PallaviKhale; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Hakka_Noodles,_Veg_Manchurian_PK009.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Tea": {
+    "image": "/uploads/menu-food/chai.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Ganesh Mohan T; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Masala_Chai.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Hot Coffee": {
+    "image": "/uploads/menu-food/coffee.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: TricksterWildcat; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Cappuccino_and_cookie.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Green Tea": {
+    "image": "/uploads/menu-food/green-tea.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Douglas P Perkins; CC BY 3.0. Source: https://commons.wikimedia.org/wiki/File:White_cup_with_green_tea_in_it.jpg License: https://creativecommons.org/licenses/by/3.0"
+  },
+  "booth4@campuscart.local:Veg Manchow Soup": {
+    "image": "/uploads/menu-food/manchow-soup.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Sarkar Sayantan; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Manchow_soup_-_Indo-Chinese_cuisine.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Hot n Sour Soup": {
+    "image": "/uploads/menu-food/hot-sour-soup.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Evan-Amos; Public domain. Source: https://commons.wikimedia.org/wiki/File:Hot-and-Sour-Soup-Bowl.jpg"
+  },
+  "booth4@campuscart.local:Tomato Soup": {
+    "image": "/uploads/menu-food/tomato-soup.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: ; CC BY-SA 2.0. Source: https://commons.wikimedia.org/wiki/File:Tomato_soup.jpg License: https://creativecommons.org/licenses/by-sa/2.0"
+  },
+  "booth4@campuscart.local:Plain Dosa": {
+    "image": "/uploads/menu-food/dosa.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Libreravi; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Plain_Dosa_from_North_India.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Masala Dosa": {
+    "image": "/uploads/menu-food/masala-dosa.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Marajozkee; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Masala_dosa_01.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Paneer Dosa": {
+    "image": "/uploads/menu-food/masala-dosa.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Marajozkee; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Masala_dosa_01.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Cheese Dosa": {
+    "image": "/uploads/menu-food/masala-dosa.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Marajozkee; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Masala_dosa_01.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "booth4@campuscart.local:Medu Vada": {
+    "image": "/uploads/menu-food/vada.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Sugeesh at ml.wikipedia; CC BY-SA 3.0. Source: https://commons.wikimedia.org/wiki/File:%E0%B4%89%E0%B4%B4%E0%B5%81%E0%B4%A8%E0%B5%8D%E0%B4%A8%E0%B5%81%E0%B4%B5%E0%B4%9F%E0%B4%95%E0%B5%BE.JPG License: https://creativecommons.org/licenses/by-sa/3.0"
+  },
+  "4h@campuscart.local:Boiled Egg": {
+    "image": "/uploads/menu-food/boiled-egg.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Ramesh NG; CC BY-SA 2.0. Source: https://commons.wikimedia.org/wiki/File:Boiled_Egg_-_Crossection.jpg License: https://creativecommons.org/licenses/by-sa/2.0"
+  },
+  "4h@campuscart.local:Bournvita Milk": {
+    "image": "/uploads/menu-food/chocolate-shake.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Bernard DUPONT; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Chocolate_milkshake_..._%F0%9F%98%8B.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Bread Butter (4 pieces)": {
+    "image": "/uploads/menu-food/bread-butter.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Gerda Arendt; CC0. Source: https://commons.wikimedia.org/wiki/File:Bread_and_butter,_Hechtsheim.jpg License: http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  "4h@campuscart.local:Bread Omelette (2 eggs)": {
+    "image": "/uploads/menu-food/bread-omelette.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Gannu03; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Bread_Omelette_6.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Bread Pakora": {
+    "image": "/uploads/menu-food/bread-pakora.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Mdsmds0; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Bread_Pakora_(Stuffed_with_Mashed-Spicy_Potatoes).JPG License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Butter Cube": {
+    "image": "/uploads/menu-food/butter.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Veganbaking.net from USA; CC BY-SA 2.0. Source: https://commons.wikimedia.org/wiki/File:Vegan_Butter_Cubes_(5627427715).jpg License: https://creativecommons.org/licenses/by-sa/2.0"
+  },
+  "4h@campuscart.local:Channa Samosa (Full)": {
+    "image": "/uploads/menu-food/chana-samosa.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Dev Jadiya; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Samosa_chat_at_Kochi,_Kerala_-_September_2026.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Channa Samosa (Half)": {
+    "image": "/uploads/menu-food/chana-samosa.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Dev Jadiya; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Samosa_chat_at_Kochi,_Kerala_-_September_2026.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Channa Bhatura (2 pieces)": {
+    "image": "/uploads/menu-food/chole-bhature.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Gannu03; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Chole_Bhature_6.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Bhatura Extra (1 piece)": {
+    "image": "/uploads/menu-food/bhatura.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: [https://www.flickr.com/people/12261156@N00 Michael Cot�] from Austin, Texas, Texas; CC BY 2.0. Source: https://commons.wikimedia.org/wiki/File:Bhatura.jpg License: https://creativecommons.org/licenses/by/2.0"
+  },
+  "4h@campuscart.local:Chowmin Egg (1 egg)": {
+    "image": "/uploads/menu-food/egg-noodles.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Gaurav Dhwaj Khadka; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Egg_Noodles_2.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Chowmin Veg": {
+    "image": "/uploads/menu-food/noodles.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: ANKAN; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetable_Chow_Mein_in_Shillong.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Coffee": {
+    "image": "/uploads/menu-food/coffee.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: TricksterWildcat; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Cappuccino_and_cookie.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Cold Coffee": {
+    "image": "/uploads/menu-food/cold-coffee.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Tony Webster; CC BY 2.0. Source: https://commons.wikimedia.org/wiki/File:Iced_Coffee_in_Glass_-_Sunshine_Coffee_-_Laramie_Cafe_(53838344552).jpg License: https://creativecommons.org/licenses/by/2.0"
+  },
+  "4h@campuscart.local:Disposable Glass/Plate (Small)": {
+    "image": "/uploads/menu-food/disposable-plate.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Amphion27; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Paper_Plate.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Disposable Glass (Big)": {
+    "image": "/uploads/menu-food/disposable-cup.png",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Alanthebox; CC0. Source: https://commons.wikimedia.org/wiki/File:Paper_Cups_-_isolated.png License: http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  "4h@campuscart.local:Doodh Patti (Tea)": {
+    "image": "/uploads/menu-food/chai.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Ganesh Mohan T; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Masala_Chai.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Egg Bhurji (2 eggs)": {
+    "image": "/uploads/menu-food/egg-bhurji.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Praveen from Bangalore, India; CC BY 2.0. Source: https://commons.wikimedia.org/wiki/File:Spicy_egg_bhurji_@_the_eggfactory.jpg License: https://creativecommons.org/licenses/by/2.0"
+  },
+  "4h@campuscart.local:Egg Bhurji (1 egg)": {
+    "image": "/uploads/menu-food/egg-bhurji.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Praveen from Bangalore, India; CC BY 2.0. Source: https://commons.wikimedia.org/wiki/File:Spicy_egg_bhurji_@_the_eggfactory.jpg License: https://creativecommons.org/licenses/by/2.0"
+  },
+  "4h@campuscart.local:French Toast Eggs": {
+    "image": "/uploads/menu-food/french-toast.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Ocdp; CC0. Source: https://commons.wikimedia.org/wiki/File:French_toast_001.jpg License: http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  "4h@campuscart.local:Fresh Juice Gajar": {
+    "image": "/uploads/menu-food/carrot-juice.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Salix; CC BY 3.0. Source: https://commons.wikimedia.org/wiki/File:GlassOfJuice_and_carrots.JPG License: https://creativecommons.org/licenses/by/3.0"
+  },
+  "4h@campuscart.local:Fresh Juice Mosammi/Orange (250 ml)": {
+    "image": "/uploads/menu-food/orange-juice.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Agency of the United States Department of Agriculture\nEdited Version by: Arad; Public domain. Source: https://commons.wikimedia.org/wiki/File:Orange_juice_1_edit1.jpg"
+  },
+  "4h@campuscart.local:Fresh Lime Soda": {
+    "image": "/uploads/menu-food/lemon-drink.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Grandmaster Huon; CC0. Source: https://commons.wikimedia.org/wiki/File:Lemonade_pitcher_and_glass.jpg License: http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  "4h@campuscart.local:Lunch Plate (Rice + Chapatti + Dal/Kadi)": {
+    "image": "/uploads/menu-food/thali.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Rajeeb Dutta; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:North_Indian_Vegetarian_Thali-MB51.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Lunch Plate (Rice + 2 Chapatti + Vegetable)": {
+    "image": "/uploads/menu-food/thali.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Rajeeb Dutta; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:North_Indian_Vegetarian_Thali-MB51.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Ice Cream Shake": {
+    "image": "/uploads/menu-food/vanilla-shake.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: jencu from bay area, usa; CC BY 2.0. Source: https://commons.wikimedia.org/wiki/File:Vanilla_milkshake_at_Lunchbox_Laboratories.jpg License: https://creativecommons.org/licenses/by/2.0"
+  },
+  "4h@campuscart.local:Lassi": {
+    "image": "/uploads/menu-food/lassi.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Gaurav Dhwaj Khadka; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Lassi_1.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Lime Water": {
+    "image": "/uploads/menu-food/lemon-drink.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Grandmaster Huon; CC0. Source: https://commons.wikimedia.org/wiki/File:Lemonade_pitcher_and_glass.jpg License: http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  "4h@campuscart.local:Maggi Egg": {
+    "image": "/uploads/menu-food/egg-maggi.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Magicstarmajnu; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Egg_corn_maggi.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Maggi Veg": {
+    "image": "/uploads/menu-food/maggi.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: M N Swarna; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetable_Maggi_Noodles-Home-AndhraPradesh-010.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Milk (200 ml)": {
+    "image": "/uploads/menu-food/milk.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Peachyeung316; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:A_Glass_of_Milk.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Mix Veg Pakora (1 kg)": {
+    "image": "/uploads/menu-food/pakora.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Mdsmds0; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Mixed_Vegetable_Pakora.JPG License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Paneer Pakora (1 kg)": {
+    "image": "/uploads/menu-food/paneer-pakora.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Vidurmayor; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Paneer_Pakora_-_Cottage_Cheese_Fritters.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Plain Bread Piece": {
+    "image": "/uploads/menu-food/bread.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Mx. Granger; CC0. Source: https://commons.wikimedia.org/wiki/File:Two_slices_of_Kingsmill_bread.jpg License: http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  "4h@campuscart.local:Plain Omelette": {
+    "image": "/uploads/menu-food/omelette.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Renee Comet (photographer); Public domain. Source: https://commons.wikimedia.org/wiki/File:FoodOmelete.jpg"
+  },
+  "4h@campuscart.local:Plain Prantha": {
+    "image": "/uploads/menu-food/paratha.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Vee Satayamas; CC BY 4.0. Source: https://commons.wikimedia.org/wiki/File:Paratha_from_Narathiwas,_Thailand.jpg License: https://creativecommons.org/licenses/by/4.0"
+  },
+  "4h@campuscart.local:Ajwain Prantha": {
+    "image": "/uploads/menu-food/paratha.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Vee Satayamas; CC BY 4.0. Source: https://commons.wikimedia.org/wiki/File:Paratha_from_Narathiwas,_Thailand.jpg License: https://creativecommons.org/licenses/by/4.0"
+  },
+  "4h@campuscart.local:Prantha Aloo": {
+    "image": "/uploads/menu-food/aloo-paratha.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Gannu03; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Aloo_Paratha_(96238).jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Prantha Pyaz": {
+    "image": "/uploads/menu-food/paratha.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Vee Satayamas; CC BY 4.0. Source: https://commons.wikimedia.org/wiki/File:Paratha_from_Narathiwas,_Thailand.jpg License: https://creativecommons.org/licenses/by/4.0"
+  },
+  "4h@campuscart.local:Prantha Gobhi": {
+    "image": "/uploads/menu-food/gobi-paratha.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Nithyasrm; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Picture_of_tasty_Gobi_paratha.JPG License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Prantha Mix": {
+    "image": "/uploads/menu-food/paratha.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Vee Satayamas; CC BY 4.0. Source: https://commons.wikimedia.org/wiki/File:Paratha_from_Narathiwas,_Thailand.jpg License: https://creativecommons.org/licenses/by/4.0"
+  },
+  "4h@campuscart.local:Prantha Omelette": {
+    "image": "/uploads/menu-food/paratha.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Vee Satayamas; CC BY 4.0. Source: https://commons.wikimedia.org/wiki/File:Paratha_from_Narathiwas,_Thailand.jpg License: https://creativecommons.org/licenses/by/4.0"
+  },
+  "4h@campuscart.local:Prantha Paneer": {
+    "image": "/uploads/menu-food/paneer-paratha.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Akshay Sanjay Agrawal; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Paneer_Paratha.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Samosa": {
+    "image": "/uploads/menu-food/samosa.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Gaurav Dhwaj Khadka; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Samosa_4.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Simple Maggi": {
+    "image": "/uploads/menu-food/maggi.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: M N Swarna; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Vegetable_Maggi_Noodles-Home-AndhraPradesh-010.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Tea": {
+    "image": "/uploads/menu-food/chai.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Ganesh Mohan T; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Masala_Chai.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Dal Bowl/Sabji Bowl": {
+    "image": "/uploads/menu-food/dal.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Southofindia; CC BY-SA 3.0. Source: https://commons.wikimedia.org/wiki/File:Tadka_Dal.jpg License: https://creativecommons.org/licenses/by-sa/3.0"
+  },
+  "4h@campuscart.local:Black Coffee": {
+    "image": "/uploads/menu-food/black-coffee.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Julius Schorzman; CC BY-SA 2.0. Source: https://commons.wikimedia.org/wiki/File:A_small_cup_of_coffee.JPG License: https://creativecommons.org/licenses/by-sa/2.0"
+  },
+  "4h@campuscart.local:Black Tea": {
+    "image": "/uploads/menu-food/black-tea.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: AntanO; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Cup_of_black_tea.JPG License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Chappati": {
+    "image": "/uploads/menu-food/chapati.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Jitesh Saini; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Chapati_Close-up.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Sprouts": {
+    "image": "/uploads/menu-food/sprouts.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Kumawat10; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Sprouts_Salad_with_Corn.JPG License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Puri Sabji": {
+    "image": "/uploads/menu-food/puri-sabji.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Ask27; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Puri_Bhajji_in_Mumbai_Restaurant.JPG License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Extra Poori": {
+    "image": "/uploads/menu-food/puri.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Gaurav Dhwaj Khadka; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Puri_(food).jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Poha": {
+    "image": "/uploads/menu-food/poha.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Mrsagar105; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Poha_with_tomato_sause.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Corn flakes": {
+    "image": "/uploads/menu-food/cornflakes.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: JIP; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Corn_flakes_in_a_bowl.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "4h@campuscart.local:Green Tea": {
+    "image": "/uploads/menu-food/green-tea.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Douglas P Perkins; CC BY 3.0. Source: https://commons.wikimedia.org/wiki/File:White_cup_with_green_tea_in_it.jpg License: https://creativecommons.org/licenses/by/3.0"
+  },
+  "4h@campuscart.local:Idli (2 pieces)": {
+    "image": "/uploads/menu-food/idli.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Soumya dey at English Wikipedia; CC BY-SA 3.0. Source: https://commons.wikimedia.org/wiki/File:Idli_Sambar.JPG License: http://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  "4h@campuscart.local:Curd": {
+    "image": "/uploads/menu-food/curd.jpg",
+    "photoNote": "Representative food photo; actual presentation may vary. Photo: Vivekdoshi11; CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Curd_India.jpg License: https://creativecommons.org/licenses/by-sa/4.0"
+  }
+}

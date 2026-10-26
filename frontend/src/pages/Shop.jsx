@@ -1,185 +1,23 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useGetFilteredProductsQuery } from "../redux/api/productApiSlice";
-import { useFetchCategoriesQuery } from "../redux/api/categoryApiSlice";
-
-import {
-  setCategories,
-  setProducts,
-  setChecked,
-} from "../redux/features/shop/shopSlice";
-import Loader from "../components/Loader";
-import ProductCard from "./Products/ProductCard";
-
-const Shop = () => {
-  const dispatch = useDispatch();
-  const { categories, products, checked, radio } = useSelector(
-    (state) => state.shop
-  );
-
-  const categoriesQuery = useFetchCategoriesQuery();
-  const [priceFilter, setPriceFilter] = useState("");
-
-  const filteredProductsQuery = useGetFilteredProductsQuery({
-    checked,
-    radio,
-  });
-
-  useEffect(() => {
-    if (!categoriesQuery.isLoading) {
-      dispatch(setCategories(categoriesQuery.data));
-    }
-  }, [categoriesQuery.data, dispatch]);
-
-  useEffect(() => {
-    if (!checked.length || !radio.length) {
-      if (!filteredProductsQuery.isLoading) {
-        // Filter products based on both checked categories and price filter
-        const filteredProducts = filteredProductsQuery.data.filter(
-          (product) => {
-            // Check if the product price includes the entered price filter value
-            return (
-              product.price.toString().includes(priceFilter) ||
-              product.price === parseInt(priceFilter, 10)
-            );
-          }
-        );
-
-        dispatch(setProducts(filteredProducts));
-      }
-    }
-  }, [checked, radio, filteredProductsQuery.data, dispatch, priceFilter]);
-
-  const handleBrandClick = (brand) => {
-    const productsByBrand = filteredProductsQuery.data?.filter(
-      (product) => product.brand === brand
-    );
-    dispatch(setProducts(productsByBrand));
-  };
-
-  const handleCheck = (value, id) => {
-    const updatedChecked = value
-      ? [...checked, id]
-      : checked.filter((c) => c !== id);
-    dispatch(setChecked(updatedChecked));
-  };
-
-  // Add "All Brands" option to uniqueBrands
-  const uniqueBrands = [
-    ...Array.from(
-      new Set(
-        filteredProductsQuery.data
-          ?.map((product) => product.brand)
-          .filter((brand) => brand !== undefined)
-      )
-    ),
-  ];
-
-  const handlePriceChange = (e) => {
-    // Update the price filter state when the user types in the input filed
-    setPriceFilter(e.target.value);
-  };
-
-  return (
-    <>
-      <div className="container mx-auto">
-        <div className="flex md:flex-row">
-          <div className="bg-[#151515] p-3 mt-2 mb-2">
-            <h2 className="h4 text-center py-2 bg-black rounded-full mb-2">
-              Filter by Categories
-            </h2>
-
-            <div className="p-5 w-[15rem]">
-              {categories?.map((c) => (
-                <div key={c._id} className="mb-2">
-                  <div className="flex ietms-center mr-4">
-                    <input
-                      type="checkbox"
-                      id="red-checkbox"
-                      onChange={(e) => handleCheck(e.target.checked, c._id)}
-                      className="w-4 h-4 text-pink-600 bg-gray-100 border-gray-300 rounded focus:ring-pink-500 dark:focus:ring-pink-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
-
-                    <label
-                      htmlFor="pink-checkbox"
-                      className="ml-2 text-sm font-medium text-white dark:text-gray-300"
-                    >
-                      {c.name}
-                    </label>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <h2 className="h4 text-center py-2 bg-black rounded-full mb-2">
-              Filter by Brands
-            </h2>
-
-            <div className="p-5">
-              {uniqueBrands?.map((brand) => (
-                <>
-                  <div className="flex items-enter mr-4 mb-5">
-                    <input
-                      type="radio"
-                      id={brand}
-                      name="brand"
-                      onChange={() => handleBrandClick(brand)}
-                      className="w-4 h-4 text-pink-400 bg-gray-100 border-gray-300 focus:ring-pink-500 dark:focus:ring-pink-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
-
-                    <label
-                      htmlFor="pink-radio"
-                      className="ml-2 text-sm font-medium text-white dark:text-gray-300"
-                    >
-                      {brand}
-                    </label>
-                  </div>
-                </>
-              ))}
-            </div>
-
-            <h2 className="h4 text-center py-2 bg-black rounded-full mb-2">
-              Filer by Price
-            </h2>
-
-            <div className="p-5 w-[15rem]">
-              <input
-                type="text"
-                placeholder="Enter Price"
-                value={priceFilter}
-                onChange={handlePriceChange}
-                className="w-full px-3 py-2 placeholder-gray-400 border rounded-lg focus:outline-none focus:ring focus:border-pink-300"
-              />
-            </div>
-
-            <div className="p-5 pt-0">
-              <button
-                className="w-full border my-4"
-                onClick={() => window.location.reload()}
-              >
-                Reset
-              </button>
-            </div>
-          </div>
-
-          <div className="p-3">
-            <h2 className="h4 text-center mb-2">{products?.length} Products</h2>
-            <div className="flex flex-wrap">
-              {products.length === 0 ? (
-                <Loader />
-              ) : (
-                products?.map((p) => (
-                  <div className="p-3" key={p._id}>
-                    <ProductCard p={p} />
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
-
-export default Shop;
+import {useMemo} from 'react';
+import {Link,useSearchParams} from 'react-router-dom';
+import {useRemote,money} from '../Utils/marketplace';
+import ProductCard from './Products/ProductCard';
+export default function Shop({embedded=false}) {
+  const {data,error,loading,reload}=useRemote('/api/products/allproducts');
+  const categories=useRemote('/api/category/categories');
+  const [params,setParams]=useSearchParams();
+  const search=embedded?'':params.get('q')||'',shop=embedded?'':params.get('shop')||'',category=embedded?'':params.get('category')||'',sort=embedded?'new':params.get('sort')||'new';
+  const update=(key,value)=>{const next=new URLSearchParams(params);value?next.set(key,value):next.delete(key);setParams(next);};
+  const shops=useMemo(()=>[...new Map((data||[]).filter(p=>p.shopkeeper).map(p=>[p.shopkeeper._id,p.shopkeeper])).values()],[data]);
+  const tiles=useMemo(()=>(categories.data||[]).map(c=>({...c,products:(data||[]).filter(p=>(!shop||p.shopkeeper?._id===shop)&&String(p.category?._id||p.category)===c._id)})).filter(c=>c.products.length),[categories.data,data,shop]);
+  const products=useMemo(()=>{const list=(data||[]).filter(p=>(!shop||p.shopkeeper?._id===shop)&&(!category||String(p.category?._id||p.category)===category)&&((p.name||'Shop item')+' '+(p.brand||'')+' '+(p.shopkeeper?.shopName||'')).toLowerCase().includes(search.toLowerCase()));if(sort==='low')list.sort((a,b)=>a.price-b.price);if(sort==='high')list.sort((a,b)=>b.price-a.price);return list;},[data,search,shop,category,sort]);
+  const groups=embedded&&tiles.length?tiles.map(c=>({id:c._id,name:c.name,items:c.products})): [{id:'all',name:search?'Results for “'+search+'”':category?tiles.find(c=>c._id===category)?.name||'Products':embedded?'Everyday favourites':'All products',items:products}];
+  const uncategorised=(data||[]).filter(p=>!tiles.some(t=>t.products.some(item=>item._id===p._id)));
+  if(embedded&&tiles.length&&uncategorised.length)groups.push({id:'other',name:'More to discover',items:uncategorised});
+  return <section className="quick-market">
+    <section className="shop-picker-section" id="choose-shop"><div className="section-heading"><div><span className="eyebrow">YOUR CAMPUS SHOPS</span><h2>Choose a shop, or explore them all</h2><p className="muted">Mix items from different shops in one bag. Each shop handles its own delivery.</p></div><Link to="/shop">Browse all products →</Link></div><div className="shop-picker-list"><Link className={'shop-picker-option '+(!shop?'selected':'')} to="/shop">All shops</Link>{shops.map(s=><Link key={s._id} className={'shop-picker-option '+(shop===s._id?'selected':'')} to={'/shop?shop='+s._id}><strong>{s.shopName||s.username}</strong><small>{s.deliveryPolicy?.deliveryMinutes} min · {money(s.deliveryPolicy?.deliveryCharge)} delivery below {money(s.deliveryPolicy?.minimumOrder)}</small></Link>)}</div></section>
+    {tiles.length>0&&<nav className="category-grid" aria-label="Product categories">{!embedded&&<Link to={shop?'/shop?shop='+shop:'/shop'} className={'category-tile '+(!category?'selected':'')}><span className="category-visual all-categories">▦</span><strong>All products</strong></Link>}{tiles.map(c=><Link key={c._id} className={'category-tile '+(category===c._id?'selected':'')} to={'/shop?'+new URLSearchParams({category:c._id,...(shop?{shop}:{})})}><span className="category-visual"><img src={c.products[0].image} alt="" onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src="/product-placeholder.svg";}}/></span><strong>{c.name}</strong></Link>)}</nav>}
+    {!embedded&&<div className="quick-filter"><p>{products.length} products {search&&<>matching <strong>{search}</strong></>}</p><select aria-label="Filter by shop" value={shop} onChange={e=>update('shop',e.target.value)}><option value="">All shops</option>{shops.map(s=><option key={s._id} value={s._id}>{s.shopName||s.username}</option>)}</select><select aria-label="Sort products" value={sort} onChange={e=>update('sort',e.target.value)}><option value="new">Newest first</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option></select>{(category||search||shop)&&<Link to="/shop">Clear filters</Link>}</div>}
+    {loading?<div className="empty-state">Stocking up your screen…</div>:error?<div className="empty-state error" role="alert">{error}<button onClick={reload}>Try again</button></div>:!products.length?<div className="empty-state"><h2>{data?.length?'No matching products':'Your local shops are getting ready'}</h2><p>{data?.length?'Try another category or search.':'Products from active shopkeepers will appear here.'}</p></div>:groups.map(g=><section key={g.id} className="product-shelf"><div className="shelf-heading"><h2>{g.name}</h2>{embedded&&<Link to={g.id==='all'||g.id==='other'?'/shop':'/shop?category='+g.id}>see all →</Link>}</div><div className={embedded?'product-grid quick-shelf':'product-grid'}>{g.items.slice(0,embedded?6:undefined).map(p=><ProductCard key={p._id} p={p}/>)}</div></section>)}
+  </section>;
+}

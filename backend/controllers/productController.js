@@ -1,224 +1,48 @@
-import asyncHandler from "../middlewares/asyncHandler.js";
-import Product from "../models/productModel.js";
-
-const addProduct = asyncHandler(async (req, res) => {
-  try {
-    const { name, description, price, category, quantity, brand } = req.fields;
-
-    // Validation
-    switch (true) {
-      case !name:
-        return res.json({ error: "Name is required" });
-      case !brand:
-        return res.json({ error: "Brand is required" });
-      case !description:
-        return res.json({ error: "Description is required" });
-      case !price:
-        return res.json({ error: "Price is required" });
-      case !category:
-        return res.json({ error: "Category is required" });
-      case !quantity:
-        return res.json({ error: "Quantity is required" });
-    }
-
-    const product = new Product({ ...req.fields });
-    await product.save();
-    res.json(product);
-  } catch (error) {
-    console.error(error);
-    res.status(400).json(error.message);
-  }
+import Product from '../models/productModel.js';
+import {rankRecommendations} from '../utils/recommendations.js';
+import User from '../models/userModel.js';
+import asyncHandler from '../middlewares/asyncHandler.js';
+import {roleOf,fail,numeric} from '../utils/marketplace.js';
+const shopFields={path:'shopkeeper',select:'shopName username deliveryPolicy.minimumOrder deliveryPolicy.deliveryCharge deliveryPolicy.deliveryMinutes'};
+const activeShops=async () => (await User.find({role:'shopkeeper',status:'active'}).select('_id')).map(s=>s._id);
+async function owned(req) {
+ const p=await Product.findById(req.params.id); if (!p) fail('Product not found.',404);
+ if (roleOf(req.user)==='shopkeeper' && String(p.shopkeeper)!==String(req.user._id)) fail('You can only manage your own products.',403);
+ return p;
+}
+async function fields(req,old) {
+ const b=req.fields || req.body;
+ const shopkeeper=roleOf(req.user)==='shopkeeper' ? req.user._id : b.shopkeeper || old?.shopkeeper;
+ const shop=await User.findOne({_id:shopkeeper,role:'shopkeeper',status:'active'});
+ if (!shop) fail('Assign this product to an active shopkeeper.');
+ if (!b.image || !/^(\/uploads\/|https?:\/\/)/.test(b.image)) fail('Upload a product photo.');
+ const stock=numeric(b.countInStock ?? 1,'Stock',0,100000); if (!Number.isInteger(stock)) fail('Stock must be a whole number.');
+ return {name:String(b.name || '').trim(),image:b.image,description:String(b.description || ''),brand:String(b.brand || ''),category:b.category === undefined ? old?.category : b.category || undefined,price:numeric(b.price,'Price',0.01),countInStock:stock,shopkeeper};
+}
+export const addProduct=asyncHandler(async (req,res)=>res.status(201).json(await Product.create(await fields(req))));
+export const updateProductDetails=asyncHandler(async (req,res)=>{const p=await owned(req);Object.assign(p,await fields(req,p));res.json(await p.save());});
+export const removeProduct=asyncHandler(async(req,res)=>{const p=await owned(req);await p.deleteOne();res.json({message:'Product removed.'});});
+export const fetchAllProducts=asyncHandler(async(req,res)=>res.json(await Product.find({shopkeeper:{$in:await activeShops()}}).populate(shopFields).sort({createdAt:-1})));
+export const manageProducts=asyncHandler(async(req,res)=>res.json(await Product.find(roleOf(req.user)==='shopkeeper'?{shopkeeper:req.user._id}:{}).populate(shopFields).sort({createdAt:-1})));
+export const fetchProducts=asyncHandler(async(req,res)=>res.json({products:await Product.find({shopkeeper:{$in:await activeShops()}}).populate(shopFields).sort({createdAt:-1}),page:1,pages:1}));
+export const fetchProductById=asyncHandler(async(req,res)=>{const p=await Product.findOne({_id:req.params.id,shopkeeper:{$in:await activeShops()}}).populate(shopFields);if(!p)fail('This product is unavailable.',404);res.json(p);});
+export const fetchTopProducts=asyncHandler(async(req,res)=>res.json(await Product.find({shopkeeper:{$in:await activeShops()}}).populate(shopFields).sort({rating:-1}).limit(4)));
+export const fetchNewProducts=fetchAllProducts;
+export const filterProducts=fetchAllProducts;
+export const addProductReview=asyncHandler(async(req,res)=>{
+ const p=await Product.findOne({_id:req.params.id,shopkeeper:{$in:await activeShops()}});if(!p)fail('Product unavailable.',404);
+ if(p.reviews.some(r=>String(r.user)===String(req.user._id)))fail('You have already reviewed this product.');
+ const rating=numeric(req.body.rating,'Rating',1,5);if(!Number.isInteger(rating)||!req.body.comment?.trim())fail('Enter a rating and review.');
+ p.reviews.push({name:req.user.username,user:req.user._id,rating,comment:req.body.comment.trim()});
+ p.numReviews=p.reviews.length;p.rating=p.reviews.reduce((s,r)=>s+r.rating,0)/p.numReviews;await p.save();res.status(201).json({message:'Review added.'});
 });
 
-const updateProductDetails = asyncHandler(async (req, res) => {
-  try {
-    const { name, description, price, category, quantity, brand } = req.fields;
 
-    // Validation
-    switch (true) {
-      case !name:
-        return res.json({ error: "Name is required" });
-      case !brand:
-        return res.json({ error: "Brand is required" });
-      case !description:
-        return res.json({ error: "Description is required" });
-      case !price:
-        return res.json({ error: "Price is required" });
-      case !category:
-        return res.json({ error: "Category is required" });
-      case !quantity:
-        return res.json({ error: "Quantity is required" });
-    }
-
-    const product = await Product.findByIdAndUpdate(
-      req.params.id,
-      { ...req.fields },
-      { new: true }
-    );
-
-    await product.save();
-
-    res.json(product);
-  } catch (error) {
-    console.error(error);
-    res.status(400).json(error.message);
-  }
+export const fetchRecommendations = asyncHandler(async (req,res) => {
+  const shopIds = await activeShops();
+  const source = await Product.findOne({_id:req.params.id,shopkeeper:{$in:shopIds}}).lean();
+  if (!source) fail('This product is unavailable.',404);
+  const candidates = await Product.find({_id:{$ne:source._id},shopkeeper:{$in:shopIds},countInStock:{$gt:0}})
+    .populate(shopFields).lean();
+  res.json(rankRecommendations(source,candidates));
 });
-
-const removeProduct = asyncHandler(async (req, res) => {
-  try {
-    const product = await Product.findByIdAndDelete(req.params.id);
-    res.json(product);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
-  }
-});
-
-const fetchProducts = asyncHandler(async (req, res) => {
-  try {
-    const pageSize = 6;
-
-    const keyword = req.query.keyword
-      ? {
-          name: {
-            $regex: req.query.keyword,
-            $options: "i",
-          },
-        }
-      : {};
-
-    const count = await Product.countDocuments({ ...keyword });
-    const products = await Product.find({ ...keyword }).limit(pageSize);
-
-    res.json({
-      products,
-      page: 1,
-      pages: Math.ceil(count / pageSize),
-      hasMore: false,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server Error" });
-  }
-});
-
-const fetchProductById = asyncHandler(async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
-    if (product) {
-      return res.json(product);
-    } else {
-      res.status(404);
-      throw new Error("Product not found");
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(404).json({ error: "Product not found" });
-  }
-});
-
-const fetchAllProducts = asyncHandler(async (req, res) => {
-  try {
-    const products = await Product.find({})
-      .populate("category")
-      .limit(12)
-      .sort({ createAt: -1 });
-
-    res.json(products);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server Error" });
-  }
-});
-
-const addProductReview = asyncHandler(async (req, res) => {
-  try {
-    const { rating, comment } = req.body;
-    const product = await Product.findById(req.params.id);
-
-    if (product) {
-      const alreadyReviewed = product.reviews.find(
-        (r) => r.user.toString() === req.user._id.toString()
-      );
-
-      if (alreadyReviewed) {
-        res.status(400);
-        throw new Error("Product already reviewed");
-      }
-
-      const review = {
-        name: req.user.username,
-        rating: Number(rating),
-        comment,
-        user: req.user._id,
-      };
-
-      product.reviews.push(review);
-
-      product.numReviews = product.reviews.length;
-
-      product.rating =
-        product.reviews.reduce((acc, item) => item.rating + acc, 0) /
-        product.reviews.length;
-
-      await product.save();
-      res.status(201).json({ message: "Review added" });
-    } else {
-      res.status(404);
-      throw new Error("Product not found");
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(400).json(error.message);
-  }
-});
-
-const fetchTopProducts = asyncHandler(async (req, res) => {
-  try {
-    const products = await Product.find({}).sort({ rating: -1 }).limit(4);
-    res.json(products);
-  } catch (error) {
-    console.error(error);
-    res.status(400).json(error.message);
-  }
-});
-
-const fetchNewProducts = asyncHandler(async (req, res) => {
-  try {
-    const products = await Product.find().sort({ _id: -1 }).limit(5);
-    res.json(products);
-  } catch (error) {
-    console.error(error);
-    res.status(400).json(error.message);
-  }
-});
-
-const filterProducts = asyncHandler(async (req, res) => {
-  try {
-    const { checked, radio } = req.body;
-
-    let args = {};
-    if (checked.length > 0) args.category = checked;
-    if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] };
-
-    const products = await Product.find(args);
-    res.json(products);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server Error" });
-  }
-});
-
-export {
-  addProduct,
-  updateProductDetails,
-  removeProduct,
-  fetchProducts,
-  fetchProductById,
-  fetchAllProducts,
-  addProductReview,
-  fetchTopProducts,
-  fetchNewProducts,
-  filterProducts,
-};

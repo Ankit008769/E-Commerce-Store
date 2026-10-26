@@ -1,220 +1,32 @@
-import { useState } from "react";
-import {
-  AiOutlineHome,
-  AiOutlineShopping,
-  AiOutlineLogin,
-  AiOutlineUserAdd,
-  AiOutlineShoppingCart,
-} from "react-icons/ai";
-import { FaHeart } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import "./Navigation.css";
-import { useSelector, useDispatch } from "react-redux";
-import { useLogoutMutation } from "../../redux/api/usersApiSlice";
-import { logout } from "../../redux/features/auth/authSlice";
-import FavoritesCount from "../Products/FavoritesCount";
-
-const Navigation = () => {
-  const { userInfo } = useSelector((state) => state.auth);
-  const { cartItems } = useSelector((state) => state.cart);
-
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [showSidebar, setShowSidebar] = useState(false);
-
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const [logoutApiCall] = useLogoutMutation();
-
-  const logoutHandler = async () => {
-    try {
-      await logoutApiCall().unwrap();
-      dispatch(logout());
-      navigate("/login");
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  return (
-    <div
-      style={{ zIndex: 9999 }}
-      className={`${
-        showSidebar ? "hidden" : "flex"
-      } xl:flex lg:flex md:hidden sm:hidden flex-col justify-between p-4 text-white bg-[#000] w-[4%] hover:w-[15%] h-[100vh]  fixed `}
-      id="navigation-container"
-    >
-      <div className="flex flex-col justify-center space-y-4">
-        <Link
-          to="/"
-          className="flex items-center transition-transform transform hover:translate-x-2"
-        >
-          <AiOutlineHome className="mr-2 mt-[3rem]" size={26} />
-          <span className="hidden nav-item-name mt-[3rem]">HOME</span>{" "}
-        </Link>
-
-        <Link
-          to="/shop"
-          className="flex items-center transition-transform transform hover:translate-x-2"
-        >
-          <AiOutlineShopping className="mr-2 mt-[3rem]" size={26} />
-          <span className="hidden nav-item-name mt-[3rem]">SHOP</span>{" "}
-        </Link>
-
-        <Link to="/cart" className="flex relative">
-          <div className="flex items-center transition-transform transform hover:translate-x-2">
-            <AiOutlineShoppingCart className="mt-[3rem] mr-2" size={26} />
-            <span className="hidden nav-item-name mt-[3rem]">Cart</span>{" "}
-          </div>
-
-          <div className="absolute top-9">
-            {cartItems.length > 0 && (
-              <span>
-                <span className="px-1 py-0 text-sm text-white bg-pink-500 rounded-full">
-                  {cartItems.reduce((a, c) => a + c.qty, 0)}
-                </span>
-              </span>
-            )}
-          </div>
-        </Link>
-
-        <Link to="/favorite" className="flex relative">
-          <div className="flex justify-center items-center transition-transform transform hover:translate-x-2">
-            <FaHeart className="mt-[3rem] mr-2" size={20} />
-            <span className="hidden nav-item-name mt-[3rem]">
-              Favorites
-            </span>{" "}
-            <FavoritesCount />
-          </div>
-        </Link>
-      </div>
-
-      <div className="relative">
-        <button
-          onClick={toggleDropdown}
-          className="flex items-center text-gray-800 focus:outline-none"
-        >
-          {userInfo ? (
-            <span className="text-white">{userInfo.username}</span>
-          ) : (
-            <></>
-          )}
-          {userInfo && (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className={`h-4 w-4 ml-1 ${
-                dropdownOpen ? "transform rotate-180" : ""
-              }`}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="white"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d={dropdownOpen ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"}
-              />
-            </svg>
-          )}
-        </button>
-
-        {dropdownOpen && userInfo && (
-          <ul
-            className={`absolute right-0 mt-2 mr-14 space-y-2 bg-white text-gray-600 ${
-              !userInfo.isAdmin ? "-top-20" : "-top-80"
-            } `}
-          >
-            {userInfo.isAdmin && (
-              <>
-                <li>
-                  <Link
-                    to="/admin/dashboard"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    Dashboard
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/admin/productlist"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    Products
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/admin/categorylist"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    Category
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/admin/orderlist"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    Orders
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/admin/userlist"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    Users
-                  </Link>
-                </li>
-              </>
-            )}
-
-            <li>
-              <Link to="/profile" className="block px-4 py-2 hover:bg-gray-100">
-                Profile
-              </Link>
-            </li>
-            <li>
-              <button
-                onClick={logoutHandler}
-                className="block w-full px-4 py-2 text-left hover:bg-gray-100"
-              >
-                Logout
-              </button>
-            </li>
-          </ul>
-        )}
-        {!userInfo && (
-          <ul>
-            <li>
-              <Link
-                to="/login"
-                className="flex items-center mt-5 transition-transform transform hover:translate-x-2"
-              >
-                <AiOutlineLogin className="mr-2 mt-[4px]" size={26} />
-                <span className="hidden nav-item-name">LOGIN</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/register"
-                className="flex items-center mt-5 transition-transform transform hover:translate-x-2"
-              >
-                <AiOutlineUserAdd size={26} />
-                <span className="hidden nav-item-name">REGISTER</span>
-              </Link>
-            </li>
-          </ul>
-        )}
-      </div>
-    </div>
-  );
-};
-
-export default Navigation;
+import {useEffect,useRef,useState} from 'react';
+import {Link,useLocation,useNavigate} from 'react-router-dom';
+import {useDispatch,useSelector} from 'react-redux';
+import {logout} from '../../redux/features/auth/authSlice';
+import {saveShippingAddress} from '../../redux/features/cart/cartSlice';
+import {api,roleOf,roleLabel,money} from '../../Utils/marketplace';
+import {toast} from 'react-toastify';
+import CartDrawer from '../../components/CartDrawer';
+function LocationDialog({onClose,address}) {
+  const dialog=useRef(null),dispatch=useDispatch(),[form,setForm]=useState({address:'',city:'',postalCode:'',country:'India',...address});
+  useEffect(()=>{const d=dialog.current;d.showModal();return()=>d.close();},[]);
+  return <dialog ref={dialog} className="location-dialog" onCancel={onClose}><form onSubmit={e=>{e.preventDefault();dispatch(saveShippingAddress(form));onClose();}}><div className="section-heading"><h2>Where should we deliver?</h2><button type="button" className="text-button" onClick={onClose} aria-label="Close location">×</button></div><p className="muted">Enter your address or campus hostel. You can review it at checkout.</p>{[['address','Address / hostel & room'],['city','City'],['postalCode','PIN code'],['country','Country']].map(([key,label])=><label key={key}>{label}<input autoFocus={key==='address'} required maxLength="300" value={form[key]} onChange={e=>setForm({...form,[key]:e.target.value})}/></label>)}<button>Save delivery location</button></form></dialog>;
+}
+export default function Navigation() {
+  const {userInfo}=useSelector(s=>s.auth),cart=useSelector(s=>s.cart),dispatch=useDispatch(),navigate=useNavigate(),location=useLocation();
+  const management=location.pathname.startsWith('/admin'),role=roleOf(userInfo),staff=role!=='customer';
+  const [search,setSearch]=useState(''),[showCart,setShowCart]=useState(false),[showLocation,setShowLocation]=useState(false);
+  useEffect(()=>setSearch(new URLSearchParams(location.search).get('q')||''),[location.search]);
+  const signout=async()=>{try{await api('/api/users/logout',{method:'POST'});dispatch(logout());navigate(management?'/admin/login':'/login');}catch(e){toast.error(e.message);}};
+  const count=cart.cartItems.reduce((s,i)=>s+Number(i.qty),0),total=cart.cartItems.reduce((s,i)=>s+i.price*Number(i.qty),0);
+  return <><header className={management?'site-header':'quick-header'}>
+    <Link className={management?'brand':'quick-brand'} to={management?'/admin/dashboard':'/'}>campus<span>cart</span>{management&&<small>MANAGEMENT</small>}</Link>
+    {!management&&<><button className="location-button" onClick={()=>setShowLocation(true)}><strong>Local delivery, made easy</strong><span>{cart.shippingAddress?.address?[cart.shippingAddress.address,cart.shippingAddress.city].filter(Boolean).join(', '):'Select your delivery location'} ▾</span></button><form className="header-search" role="search" onSubmit={e=>{e.preventDefault();const next=new URLSearchParams();const selected=new URLSearchParams(location.search).get('shop');if(selected)next.set('shop',selected);if(search.trim())next.set('q',search.trim());navigate('/shop?'+next);}}><button aria-label="Search products" type="submit">⌕</button><input aria-label="Search products or shops" placeholder='Search for products, brands or shops' value={search} onChange={e=>setSearch(e.target.value)}/>{search&&<button type="button" aria-label="Clear search" onClick={()=>{setSearch('');const selected=new URLSearchParams(location.search).get('shop');navigate(selected?'/shop?shop='+selected:'/shop');}}>×</button>}</form></>}
+    <nav aria-label="Account navigation">{management&&<><Link to="/">View storefront ↗</Link>{userInfo&&staff&&<span className="role-badge">{roleLabel(role)}</span>}</>}
+      {userInfo?<details className="account-menu"><summary>{userInfo.username.split(' ')[0]} ▾</summary><div><Link to="/profile">My profile</Link><Link to="/user-orders">My orders</Link><Link to="/favorite">Saved items</Link>{staff&&<Link to="/admin/dashboard">Management</Link>}<button className="text-button" onClick={signout}>Sign out</button></div></details>:<Link className="login-link" to={management?'/admin/login':'/login'}>Login</Link>}
+      {!management&&<button className="quick-cart-button" onClick={()=>setShowCart(true)} aria-label={'Open cart, '+count+' items'}><span aria-hidden="true">🛒</span>{count?<span>{count} items<small>{money(total)}</small></span>:<span>My cart</span>}</button>}
+    </nav>
+  </header>{!management&&<nav className="quick-subnav" aria-label="Store navigation"><Link to="/shop#choose-shop">Choose shop</Link><Link to="/favorite">My favourites</Link><Link to={userInfo?'/user-orders':'/login'}>Track my orders</Link><span>Cash on delivery available</span></nav>}
+  {showCart&&<CartDrawer onClose={()=>setShowCart(false)}/>}
+  {showLocation&&<LocationDialog address={cart.shippingAddress} onClose={()=>setShowLocation(false)}/>}
+  </>;
+}

@@ -1,36 +1,10 @@
-import mongoose from "mongoose";
-const { ObjectId } = mongoose.Schema;
-
-const reviewSchema = mongoose.Schema(
-  {
-    name: { type: String, required: true },
-    rating: { type: Number, required: true },
-    comment: { type: String, required: true },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "User",
-    },
-  },
-  { timestamps: true }
-);
-
-const productSchema = mongoose.Schema(
-  {
-    name: { type: String, required: true },
-    image: { type: String, required: true },
-    brand: { type: String, required: true },
-    quantity: { type: Number, required: true },
-    category: { type: ObjectId, ref: "Category", required: true },
-    description: { type: String, required: true },
-    reviews: [reviewSchema],
-    rating: { type: Number, required: true, default: 0 },
-    numReviews: { type: Number, required: true, default: 0 },
-    price: { type: Number, required: true, default: 0 },
-    countInStock: { type: Number, required: true, default: 0 },
-  },
-  { timestamps: true }
-);
-
-const Product = mongoose.model("Product", productSchema);
-export default Product;
+import mongoose from 'mongoose';
+const review = new mongoose.Schema({name:String,rating:{type:Number,min:1,max:5},comment:String,user:{type:mongoose.Schema.Types.ObjectId,ref:'User'}},{timestamps:true});
+const schema = new mongoose.Schema({
+ name:{type:String,trim:true,default:''},image:{type:String,required:true},shopkeeper:{type:mongoose.Schema.Types.ObjectId,ref:'User',index:true},
+ brand:{type:String,default:''},quantity:{type:Number,default:1},category:{type:mongoose.Schema.Types.ObjectId,ref:'Category'},
+ description:{type:String,default:''},reviews:[review],rating:{type:Number,default:0},numReviews:{type:Number,default:0},
+ stockReservations:{type:[{_id:false,requestId:String,reservationId:String,qty:Number}],default:[],select:false},
+ price:{type:Number,required:true,min:0.01},countInStock:{type:Number,default:1,min:0}
+},{timestamps:true});
+export default mongoose.model('Product',schema);

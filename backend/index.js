@@ -1,3 +1,4 @@
+import {recoverCheckouts} from './utils/checkoutRecovery.js';
 // packages
 import path from "path";
 import express from "express";
@@ -15,7 +16,9 @@ import orderRoutes from "./routes/orderRoutes.js";
 dotenv.config();
 const port = process.env.PORT || 5000;
 
-connectDB();
+await connectDB();
+const recovered=await recoverCheckouts();
+if(recovered)console.log(`Recovered ${recovered} interrupted checkouts.`);
 
 const app = express();
 
@@ -29,11 +32,16 @@ app.use("/api/products", productRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/orders", orderRoutes);
 
-app.get("/api/config/paypal", (req, res) => {
-  res.send({ clientId: process.env.PAYPAL_CLIENT_ID });
-});
+
 
 const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname + "/uploads")));
+
+app.use(express.static(path.join(__dirname, "frontend/dist")));
+app.get("*", (req, res) => {
+  if (req.path.startsWith("/api/") || req.path.startsWith("/uploads/")) return res.status(404).json({message: "Not found"});
+  res.sendFile(path.join(__dirname, "frontend/dist/index.html"));
+});
+app.use((error, req, res, next) => res.status(error.status || 500).json({message: error.message}));
 
 app.listen(port, () => console.log(`Server running on port: ${port}`));

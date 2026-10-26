@@ -1,38 +1,13 @@
-import express from "express";
-import {
-  createUser,
-  loginUser,
-  logoutCurrentUser,
-  getAllUsers,
-  getCurrentUserProfile,
-  updateCurrentUserProfile,
-  deleteUserById,
-  getUserById,
-  updateUserById,
-} from "../controllers/userController.js";
-
-import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
-
-const router = express.Router();
-
-router
-  .route("/")
-  .post(createUser)
-  .get(authenticate, authorizeAdmin, getAllUsers);
-
-router.post("/auth", loginUser);
-router.post("/logout", logoutCurrentUser);
-
-router
-  .route("/profile")
-  .get(authenticate, getCurrentUserProfile)
-  .put(authenticate, updateCurrentUserProfile);
-
-// ADMIN ROUTES 👇
-router
-  .route("/:id")
-  .delete(authenticate, authorizeAdmin, deleteUserById)
-  .get(authenticate, authorizeAdmin, getUserById)
-  .put(authenticate, authorizeAdmin, updateUserById);
-
-export default router;
+import express from 'express';
+import User from '../models/userModel.js';
+import asyncHandler from '../middlewares/asyncHandler.js';
+import * as c from '../controllers/userController.js';
+import {authenticate,authorizeSuperAdmin,authorizeStaff} from '../middlewares/authMiddleware.js';
+const r=express.Router();
+r.route('/').post(c.createUser).get(authenticate,authorizeSuperAdmin,c.getAllUsers);
+r.post('/auth',c.loginUser); r.post('/logout',c.logoutCurrentUser);
+r.route('/profile').get(authenticate,c.getCurrentUserProfile).put(authenticate,c.updateCurrentUserProfile);
+r.post('/staff',authenticate,authorizeSuperAdmin,c.createStaff);
+r.get('/shops',authenticate,authorizeStaff,asyncHandler(async(req,res)=>res.json(await User.find({role:'shopkeeper',status:'active'}).select('shopName username'))));
+r.route('/:id').put(authenticate,authorizeSuperAdmin,c.updateUserById).delete(authenticate,authorizeSuperAdmin,c.deleteUserById);
+export default r;

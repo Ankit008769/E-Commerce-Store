@@ -1,145 +1,41 @@
-import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
-import Message from "../../components/Message";
-import ProgressSteps from "../../components/ProgressSteps";
-import Loader from "../../components/Loader";
-import { useCreateOrderMutation } from "../../redux/api/orderApiSlice";
-import { clearCartItems } from "../../redux/features/cart/cartSlice";
+import {useEffect,useRef,useState} from 'react';
+import {Link,Navigate,useNavigate} from 'react-router-dom';
+import {useDispatch,useSelector} from 'react-redux';
+import {clearCartItems} from '../../redux/features/cart/cartSlice';
+import {api,money} from '../../Utils/marketplace';
+import {checkoutPayload,readCheckout,prepareCheckout} from '../../Utils/checkout';
+export default function PlaceOrder(){
+ const cart=useSelector(s=>s.cart),[quote,setQuote]=useState(null),[error,setError]=useState(''),[busy,setBusy]=useState(false),navigate=useNavigate(),dispatch=useDispatch();
+ const submitting=useRef(false),owner=useSelector(s=>s.auth.userInfo?._id);
+ const [recoverable,setRecoverable]=useState(false);
+ useEffect(()=>{
+  let alive=true;setQuote(null);setError('');
+  if(!cart.cartItems.length)return()=>{alive=false;};
+  const payload=checkoutPayload(cart),pending=readCheckout(sessionStorage,owner,payload);
+  setRecoverable(!!pending);
+  if(pending){
+   submitting.current=true;setBusy(true);
+   api('/api/orders',{method:'POST',body:{...payload,checkoutKey:pending.key}}).then(o=>{
+    if(!alive)return;
+    sessionStorage.removeItem('pendingCheckout');dispatch(clearCartItems());navigate('/order/'+o._id);
+   }).catch(e=>{if(alive){setError(e.message);setBusy(false);submitting.current=false;}});
+  }else{
+   api('/api/orders/quote',{method:'POST',body:{orderItems:cart.cartItems}}).then(q=>{if(alive)setQuote(q);}).catch(e=>{if(alive)setError(e.message);});
+  }
+  return()=>{alive=false;};
+ },[cart.cartItems,cart.shippingAddress,owner,dispatch,navigate]);
+ if(!cart.cartItems.length&&!busy)return <Navigate to="/cart"/>;if(!cart.shippingAddress.address)return <Navigate to="/shipping"/>;
+ const place=async()=>{
+  if(submitting.current)return;
+  submitting.current=true;setBusy(true);setError('');
+  try{
+   const payload=checkoutPayload(cart);
+   const pending=prepareCheckout(sessionStorage,owner,payload,()=>crypto.randomUUID());
+   setRecoverable(true);
+   const o=await api('/api/orders',{method:'POST',body:{...payload,checkoutKey:pending.key}});
+   sessionStorage.removeItem('pendingCheckout');dispatch(clearCartItems());navigate('/order/'+o._id);
+  }catch(e){setError(e.message);setBusy(false);submitting.current=false;}
+ };
 
-const PlaceOrder = () => {
-  const navigate = useNavigate();
-
-  const cart = useSelector((state) => state.cart);
-
-  const [createOrder, { isLoading, error }] = useCreateOrderMutation();
-
-  useEffect(() => {
-    if (!cart.shippingAddress.address) {
-      navigate("/shipping");
-    }
-  }, [cart.paymentMethod, cart.shippingAddress.address, navigate]);
-
-  const dispatch = useDispatch();
-
-  const placeOrderHandler = async () => {
-    try {
-      const res = await createOrder({
-        orderItems: cart.cartItems,
-        shippingAddress: cart.shippingAddress,
-        paymentMethod: cart.paymentMethod,
-        itemsPrice: cart.itemsPrice,
-        shippingPrice: cart.shippingPrice,
-        taxPrice: cart.taxPrice,
-        totalPrice: cart.totalPrice,
-      }).unwrap();
-      dispatch(clearCartItems());
-      navigate(`/order/${res._id}`);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  return (
-    <>
-      <ProgressSteps step1 step2 step3 />
-
-      <div className="container mx-auto mt-8">
-        {cart.cartItems.length === 0 ? (
-          <Message>Your cart is empty</Message>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr>
-                  <td className="px-1 py-2 text-left align-top">Image</td>
-                  <td className="px-1 py-2 text-left">Product</td>
-                  <td className="px-1 py-2 text-left">Quantity</td>
-                  <td className="px-1 py-2 text-left">Price</td>
-                  <td className="px-1 py-2 text-left">Total</td>
-                </tr>
-              </thead>
-
-              <tbody>
-                {cart.cartItems.map((item, index) => (
-                  <tr key={index}>
-                    <td className="p-2">
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="w-16 h-16 object-cover"
-                      />
-                    </td>
-
-                    <td className="p-2">
-                      <Link to={`/product/${item.product}`}>{item.name}</Link>
-                    </td>
-                    <td className="p-2">{item.qty}</td>
-                    <td className="p-2">{item.price.toFixed(2)}</td>
-                    <td className="p-2">
-                      $ {(item.qty * item.price).toFixed(2)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        <div className="mt-8">
-          <h2 className="text-2xl font-semibold mb-5">Order Summary</h2>
-          <div className="flex justify-between flex-wrap p-8 bg-[#181818]">
-            <ul className="text-lg">
-              <li>
-                <span className="font-semibold mb-4">Items:</span> $
-                {cart.itemsPrice}
-              </li>
-              <li>
-                <span className="font-semibold mb-4">Shipping:</span> $
-                {cart.shippingPrice}
-              </li>
-              <li>
-                <span className="font-semibold mb-4">Tax:</span> $
-                {cart.taxPrice}
-              </li>
-              <li>
-                <span className="font-semibold mb-4">Total:</span> $
-                {cart.totalPrice}
-              </li>
-            </ul>
-
-            {error && <Message variant="danger">{error.data.message}</Message>}
-
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">Shipping</h2>
-              <p>
-                <strong>Address:</strong> {cart.shippingAddress.address},{" "}
-                {cart.shippingAddress.city} {cart.shippingAddress.postalCode},{" "}
-                {cart.shippingAddress.country}
-              </p>
-            </div>
-
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">Payment Method</h2>
-              <strong>Method:</strong> {cart.paymentMethod}
-            </div>
-          </div>
-
-          <button
-            type="button"
-            className="bg-pink-500 text-white py-2 px-4 rounded-full text-lg w-full mt-4"
-            disabled={cart.cartItems === 0}
-            onClick={placeOrderHandler}
-          >
-            Place Order
-          </button>
-
-          {isLoading && <Loader />}
-        </div>
-      </div>
-    </>
-  );
-};
-
-export default PlaceOrder;
+ return <section><span className="eyebrow">ONE LAST LOOK</span><h1>Ready when you are.</h1><div className="checkout-layout"><div>{quote?.shopOrders.map(g=><div className="panel order-panel" key={g.shopkeeper}><h2>{g.shopName}</h2>{g.items.map(i=><div className="total-row" key={i.product}><span>{i.name} × {i.qty}</span><strong>{money(i.price*i.qty)}</strong></div>)}<div className="total-row"><span>Delivery</span><strong>{g.shippingPrice?money(g.shippingPrice):'Free'}</strong></div><p className="muted">Free delivery from {money(g.minimumOrder)} · Delivery within {g.deliveryMinutes} minutes of placing your order.</p></div>)}</div><aside className="panel summary"><h2>Order summary</h2><p>{Object.values(cart.shippingAddress).join(', ')}</p><Link to="/shipping">Edit address</Link>{error&&<p role="alert" className="error">{error} <Link to="/cart">Review bag</Link></p>}{quote?<><div className="total-row"><span>Items</span><strong>{money(quote.itemsPrice)}</strong></div><div className="total-row"><span>Delivery</span><strong>{money(quote.shippingPrice)}</strong></div><div className="total-row grand-total"><span>Pay on delivery</span><strong>{money(quote.totalPrice)}</strong></div><button disabled={busy} onClick={place}>{busy?'Placing order…':'Place COD order →'}</button></>:recoverable?<button disabled={busy} onClick={place}>{busy?'Recovering your order…':'Retry checkout →'}</button>:!error&&<p>Confirming prices and delivery…</p>}<p className="muted">Each shop delivers its own items. No online payment is required.</p></aside></div></section>;
+}

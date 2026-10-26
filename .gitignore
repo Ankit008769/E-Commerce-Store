@@ -1,2 +1,8 @@
-/node_modules
+node_modules/
 .env
+.env.*
+!example-env.env
+*.log
+**/dist/
+*accounts.json
+*credentials*.json
