@@ -5,11 +5,12 @@ import {logout} from '../../redux/features/auth/authSlice';
 import {saveShippingAddress} from '../../redux/features/cart/cartSlice';
 import {api,roleOf,roleLabel,money} from '../../Utils/marketplace';
 import {toast} from 'react-toastify';
+import CampusAddressFields from '../../components/CampusAddressFields';
 import CartDrawer from '../../components/CartDrawer';
 function LocationDialog({onClose,address}) {
-  const dialog=useRef(null),dispatch=useDispatch(),[form,setForm]=useState({address:'',city:'',postalCode:'',country:'India',...address});
+  const dialog=useRef(null),dispatch=useDispatch(),[form,setForm]=useState({address:'',city:'Hamirpur',postalCode:'177005',country:'India',...address});
   useEffect(()=>{const d=dialog.current;d.showModal();return()=>d.close();},[]);
-  return <dialog ref={dialog} className="location-dialog" onCancel={onClose}><form onSubmit={e=>{e.preventDefault();dispatch(saveShippingAddress(form));onClose();}}><div className="section-heading"><h2>Where should we deliver?</h2><button type="button" className="text-button" onClick={onClose} aria-label="Close location">×</button></div><p className="muted">Enter your address or campus hostel. You can review it at checkout.</p>{[['address','Address / hostel & room'],['city','City'],['postalCode','PIN code'],['country','Country']].map(([key,label])=><label key={key}>{label}<input autoFocus={key==='address'} required maxLength="300" value={form[key]} onChange={e=>setForm({...form,[key]:e.target.value})}/></label>)}<button>Save delivery location</button></form></dialog>;
+  return <dialog ref={dialog} className="location-dialog" onCancel={onClose}><form onSubmit={e=>{e.preventDefault();dispatch(saveShippingAddress(form));onClose();}}><div className="section-heading"><h2>Where should we deliver?</h2><button type="button" className="text-button" onClick={onClose} aria-label="Close location">×</button></div><p className="muted">Enter your address or campus hostel. You can review it at checkout.</p><CampusAddressFields form={form} setForm={setForm}/><button>Save delivery location</button></form></dialog>;
 }
 export default function Navigation() {
   const {userInfo}=useSelector(s=>s.auth),cart=useSelector(s=>s.cart),dispatch=useDispatch(),navigate=useNavigate(),location=useLocation();

@@ -75,3 +75,5 @@ Food photos under `uploads/menu-food` are representative, not shop-supplied. Ori
 
 New public customer registration requires an exact `@nith.ac.in` email domain (case-insensitive). Changing a customer email uses the same rule. Existing accounts continue to sign in; staff creation remains Super Admin controlled. This is a domain check only, not email ownership verification. Super Admin can search orders by customer, email, product, shop or order ID.
 `node backend/utils/migrate4HCategories.mjs` updates an existing local 4H catalogue from the old Rate List category to food categories. Fresh imports use the updated menu CSV automatically.
+
+Campus delivery locations are shared by the header picker and checkout. The searchable catalogue includes 61 named hostels/buildings/areas, based on NITH hostel and Planning & Works pages (source URLs are stored with each entry), plus user-confirmed shop names. It is not an exhaustive live campus directory. Room/block/meeting-point details and a custom-address option cover missing locations. Category navigation stays in one scrollable row with previous/next buttons.
