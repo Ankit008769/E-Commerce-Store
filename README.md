@@ -72,3 +72,6 @@ node backend/utils/importCampusMenus.js ../campus-shop-accounts.json
 This creates Booth 4 and 4H shopkeeper accounts and imports 108 and 58 menu variants respectively. The credentials file is private: keep it outside Git. Importing again does not duplicate products or reset stock/passwords. Initial stock is 100 test servings; verify inventory and configure delivery policies before taking real orders. Existing MongoDB users and orders are not stored in this repository.
 
 Food photos under `uploads/menu-food` are representative, not shop-supplied. Original sources, authors and licenses are recorded in `backend/data/menus/food-photo-credits.json` and product descriptions. `product-photos.json` preserves the item-to-photo mapping for repeat imports.
+
+New public customer registration requires an exact `@nith.ac.in` email domain (case-insensitive). Changing a customer email uses the same rule. Existing accounts continue to sign in; staff creation remains Super Admin controlled. This is a domain check only, not email ownership verification. Super Admin can search orders by customer, email, product, shop or order ID.
+`node backend/utils/migrate4HCategories.mjs` updates an existing local 4H catalogue from the old Rate List category to food categories. Fresh imports use the updated menu CSV automatically.

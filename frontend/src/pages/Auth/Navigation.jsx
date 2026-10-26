@@ -25,7 +25,7 @@ export default function Navigation() {
       {userInfo?<details className="account-menu"><summary>{userInfo.username.split(' ')[0]} ▾</summary><div><Link to="/profile">My profile</Link><Link to="/user-orders">My orders</Link><Link to="/favorite">Saved items</Link>{staff&&<Link to="/admin/dashboard">Management</Link>}<button className="text-button" onClick={signout}>Sign out</button></div></details>:<Link className="login-link" to={management?'/admin/login':'/login'}>Login</Link>}
       {!management&&<button className="quick-cart-button" onClick={()=>setShowCart(true)} aria-label={'Open cart, '+count+' items'}><span aria-hidden="true">🛒</span>{count?<span>{count} items<small>{money(total)}</small></span>:<span>My cart</span>}</button>}
     </nav>
-  </header>{!management&&<nav className="quick-subnav" aria-label="Store navigation"><Link to="/shop#choose-shop">Choose shop</Link><Link to="/favorite">My favourites</Link><Link to={userInfo?'/user-orders':'/login'}>Track my orders</Link><span>Cash on delivery available</span></nav>}
+  </header>{!management&&<nav className="quick-subnav" aria-label="Store navigation"><Link to="/favorite">My favourites</Link><Link to={userInfo?'/user-orders':'/login'}>Track my orders</Link><span>Cash on delivery available</span></nav>}
   {showCart&&<CartDrawer onClose={()=>setShowCart(false)}/>}
   {showLocation&&<LocationDialog address={cart.shippingAddress} onClose={()=>setShowLocation(false)}/>}
   </>;

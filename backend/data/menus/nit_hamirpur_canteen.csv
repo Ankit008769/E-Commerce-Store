@@ -1,59 +1,59 @@
-"shop_name","category","item_name","variant","price_inr","description","availability","notes"
-"4H Canteen","Rate List","Boiled Egg","","15","","","Source item 1"
-"4H Canteen","Rate List","Bournvita Milk","","40","","","Source item 2"
-"4H Canteen","Rate List","Bread Butter","4 pieces","30","","","Source item 3"
-"4H Canteen","Rate List","Bread Omelette","2 eggs","40","","","Source item 4"
-"4H Canteen","Rate List","Bread Pakora","","20","","","Source item 5"
-"4H Canteen","Rate List","Butter Cube","","10","","","Source item 6"
-"4H Canteen","Rate List","Channa Samosa","Full","40","","","Source item 7"
-"4H Canteen","Rate List","Channa Samosa","Half","30","","","Source item 8"
-"4H Canteen","Rate List","Channa Bhatura","2 pieces","65","","","Source item 9"
-"4H Canteen","Rate List","Bhatura Extra","1 piece","15","","","Source item 10"
-"4H Canteen","Rate List","Chowmin Egg","1 egg","60","","","Source item 11"
-"4H Canteen","Rate List","Chowmin Veg","","50","","","Source item 12"
-"4H Canteen","Rate List","Coffee","","30","","","Source item 13"
-"4H Canteen","Rate List","Cold Coffee","","35","","","Source item 14"
-"4H Canteen","Rate List","Disposable Glass/Plate","Small","1","","","Source item 15"
-"4H Canteen","Rate List","Disposable Glass","Big","2","","","Source item 16"
-"4H Canteen","Rate List","Doodh Patti (Tea)","","25","","","Source item 17"
-"4H Canteen","Rate List","Egg Bhurji","2 eggs","35","","","Source item 18"
-"4H Canteen","Rate List","Egg Bhurji","1 egg","25","","","Source item 19"
-"4H Canteen","Rate List","French Toast Eggs","","40","","","Source item 20"
-"4H Canteen","Rate List","Fresh Juice Gajar","","40","","Seasonal","Source item 21"
-"4H Canteen","Rate List","Fresh Juice Mosammi/Orange","250 ml","55","","","Source item 22"
-"4H Canteen","Rate List","Fresh Lime Soda","","30","","","Source item 23"
-"4H Canteen","Rate List","Lunch Plate (Rice + Chapatti + Dal/Kadi)","","45","","","Source item 24"
-"4H Canteen","Rate List","Lunch Plate (Rice + 2 Chapatti + Vegetable)","","80","","","Source item 25"
-"4H Canteen","Rate List","Ice Cream Shake","","40","","","Source item 26"
-"4H Canteen","Rate List","Lassi","","30","","","Source item 27"
-"4H Canteen","Rate List","Lime Water","","25","","","Source item 28"
-"4H Canteen","Rate List","Maggi Egg","","45","","","Source item 29"
-"4H Canteen","Rate List","Maggi Veg","","40","","","Source item 30"
-"4H Canteen","Rate List","Milk","200 ml","35","","","Source item 31"
-"4H Canteen","Rate List","Mix Veg Pakora","1 kg","250","","","Source item 32"
-"4H Canteen","Rate List","Paneer Pakora","1 kg","520","","","Source item 33"
-"4H Canteen","Rate List","Plain Bread Piece","","5","","","Source item 34"
-"4H Canteen","Rate List","Plain Omelette","","30","","","Source item 35"
-"4H Canteen","Rate List","Plain Prantha","","20","","","Source item 36"
-"4H Canteen","Rate List","Ajwain Prantha","","20","","","Source item 37"
-"4H Canteen","Rate List","Prantha Aloo","","30","","","Source item 38"
-"4H Canteen","Rate List","Prantha Pyaz","","35","","","Source item 39"
-"4H Canteen","Rate List","Prantha Gobhi","","35","","","Source item 40"
-"4H Canteen","Rate List","Prantha Mix","","30","","","Source item 41"
-"4H Canteen","Rate List","Prantha Omelette","","45","","","Source item 42"
-"4H Canteen","Rate List","Prantha Paneer","","45","","","Source item 43"
-"4H Canteen","Rate List","Samosa","","15","","","Source item 44"
-"4H Canteen","Rate List","Simple Maggi","","25","","","Source item 45"
-"4H Canteen","Rate List","Tea","","12","","","Source item 46"
-"4H Canteen","Rate List","Dal Bowl/Sabji Bowl","","25","","","Source item 47"
-"4H Canteen","Rate List","Black Coffee","","15","","","Source item 48"
-"4H Canteen","Rate List","Black Tea","","10","","","Source item 49"
-"4H Canteen","Rate List","Chappati","","10","","","Source item 50"
-"4H Canteen","Rate List","Sprouts","","30","","Monday to Friday; 8:30 AM to 10:30 AM","Source item 51"
-"4H Canteen","Rate List","Puri Sabji","","35","","Monday to Friday; 8:30 AM to 10:30 AM","Source item 52"
-"4H Canteen","Rate List","Extra Poori","","10","","Monday to Friday; 8:30 AM to 10:30 AM","Source item 53"
-"4H Canteen","Rate List","Poha","","25","","Till 11:00 AM","Source item 54"
-"4H Canteen","Rate List","Corn flakes","","25","","Till 11:00 AM","Source item 55"
-"4H Canteen","Rate List","Green Tea","","15","","","Source item 56"
-"4H Canteen","Rate List","Idli","2 pieces","30","","Sunday only","Source item 57"
-"4H Canteen","Rate List","Curd","","11","","","Source item 58"
+shop_name,category,item_name,variant,price_inr,description,availability,notes
+4H Canteen,Breakfast,Boiled Egg,,15,,,Source item 1
+4H Canteen,Drinks,Bournvita Milk,,40,,,Source item 2
+4H Canteen,Parathas & Breads,Bread Butter,4 pieces,30,,,Source item 3
+4H Canteen,Breakfast,Bread Omelette,2 eggs,40,,,Source item 4
+4H Canteen,Snacks,Bread Pakora,,20,,,Source item 5
+4H Canteen,Breakfast,Butter Cube,,10,,,Source item 6
+4H Canteen,Snacks,Channa Samosa,Full,40,,,Source item 7
+4H Canteen,Snacks,Channa Samosa,Half,30,,,Source item 8
+4H Canteen,Meals & Sides,Channa Bhatura,2 pieces,65,,,Source item 9
+4H Canteen,Meals & Sides,Bhatura Extra,1 piece,15,,,Source item 10
+4H Canteen,Noodles,Chowmin Egg,1 egg,60,,,Source item 11
+4H Canteen,Noodles,Chowmin Veg,,50,,,Source item 12
+4H Canteen,Tea & Coffee,Coffee,,30,,,Source item 13
+4H Canteen,Tea & Coffee,Cold Coffee,,35,,,Source item 14
+4H Canteen,Extras,Disposable Glass/Plate,Small,1,,,Source item 15
+4H Canteen,Extras,Disposable Glass,Big,2,,,Source item 16
+4H Canteen,Tea & Coffee,Doodh Patti (Tea),,25,,,Source item 17
+4H Canteen,Breakfast,Egg Bhurji,2 eggs,35,,,Source item 18
+4H Canteen,Breakfast,Egg Bhurji,1 egg,25,,,Source item 19
+4H Canteen,Breakfast,French Toast Eggs,,40,,,Source item 20
+4H Canteen,Drinks,Fresh Juice Gajar,,40,,Seasonal,Source item 21
+4H Canteen,Drinks,Fresh Juice Mosammi/Orange,250 ml,55,,,Source item 22
+4H Canteen,Drinks,Fresh Lime Soda,,30,,,Source item 23
+4H Canteen,Meals & Sides,Lunch Plate (Rice + Chapatti + Dal/Kadi),,45,,,Source item 24
+4H Canteen,Meals & Sides,Lunch Plate (Rice + 2 Chapatti + Vegetable),,80,,,Source item 25
+4H Canteen,Drinks,Ice Cream Shake,,40,,,Source item 26
+4H Canteen,Drinks,Lassi,,30,,,Source item 27
+4H Canteen,Drinks,Lime Water,,25,,,Source item 28
+4H Canteen,Noodles,Maggi Egg,,45,,,Source item 29
+4H Canteen,Noodles,Maggi Veg,,40,,,Source item 30
+4H Canteen,Drinks,Milk,200 ml,35,,,Source item 31
+4H Canteen,Snacks,Mix Veg Pakora,1 kg,250,,,Source item 32
+4H Canteen,Snacks,Paneer Pakora,1 kg,520,,,Source item 33
+4H Canteen,Parathas & Breads,Plain Bread Piece,,5,,,Source item 34
+4H Canteen,Breakfast,Plain Omelette,,30,,,Source item 35
+4H Canteen,Parathas & Breads,Plain Prantha,,20,,,Source item 36
+4H Canteen,Parathas & Breads,Ajwain Prantha,,20,,,Source item 37
+4H Canteen,Parathas & Breads,Prantha Aloo,,30,,,Source item 38
+4H Canteen,Parathas & Breads,Prantha Pyaz,,35,,,Source item 39
+4H Canteen,Parathas & Breads,Prantha Gobhi,,35,,,Source item 40
+4H Canteen,Parathas & Breads,Prantha Mix,,30,,,Source item 41
+4H Canteen,Parathas & Breads,Prantha Omelette,,45,,,Source item 42
+4H Canteen,Parathas & Breads,Prantha Paneer,,45,,,Source item 43
+4H Canteen,Snacks,Samosa,,15,,,Source item 44
+4H Canteen,Noodles,Simple Maggi,,25,,,Source item 45
+4H Canteen,Tea & Coffee,Tea,,12,,,Source item 46
+4H Canteen,Meals & Sides,Dal Bowl/Sabji Bowl,,25,,,Source item 47
+4H Canteen,Tea & Coffee,Black Coffee,,15,,,Source item 48
+4H Canteen,Tea & Coffee,Black Tea,,10,,,Source item 49
+4H Canteen,Parathas & Breads,Chappati,,10,,,Source item 50
+4H Canteen,Breakfast,Sprouts,,30,,Monday to Friday; 8:30 AM to 10:30 AM,Source item 51
+4H Canteen,Breakfast,Puri Sabji,,35,,Monday to Friday; 8:30 AM to 10:30 AM,Source item 52
+4H Canteen,Parathas & Breads,Extra Poori,,10,,Monday to Friday; 8:30 AM to 10:30 AM,Source item 53
+4H Canteen,Breakfast,Poha,,25,,Till 11:00 AM,Source item 54
+4H Canteen,Breakfast,Corn flakes,,25,,Till 11:00 AM,Source item 55
+4H Canteen,Tea & Coffee,Green Tea,,15,,,Source item 56
+4H Canteen,Breakfast,Idli,2 pieces,30,,Sunday only,Source item 57
+4H Canteen,Meals & Sides,Curd,,11,,,Source item 58

@@ -42,9 +42,14 @@ test('API permissions, per-shop COD pricing, blacklisting and idempotent deliver
  const productRequest=async(data)=>{const form=new FormData();for(const [key,value] of Object.entries(data))form.append(key,value);const response=await fetch('http://127.0.0.1:'+server.address().port+'/api/products',{method:'POST',headers:{Cookie:'jwt='+jwt.sign({userId:shop._id},process.env.JWT_SECRET)},body:form});return {status:response.status,data:await response.json()};};
  const missing=await productRequest({image:'/uploads/test.jpg',countInStock:1});assert.equal(missing.status,400);
  const unnamed=await productRequest({image:'/uploads/test.jpg',price:10,countInStock:1,shopkeeper:String(shop2._id)});assert.equal(unnamed.status,201);assert.equal(unnamed.data.name,'');assert.equal(String(unnamed.data.shopkeeper),String(shop._id));await Product.deleteOne({_id:unnamed.data._id});console.log('PASS photo and price required, name optional, seller ownership enforced');
- let r=await call(null,'/api/users','POST',{username:'New Customer',email:'new@test.local',password:'TestOnly123!',role:'superadmin',isAdmin:true});check('public registration cannot grant staff access',()=>assert.equal(r.data.role,'customer'));
+ let r=await call(null,'/api/users','POST',{username:'New Customer',email:'new@nith.ac.in',password:'TestOnly123!',role:'superadmin',isAdmin:true});check('public registration cannot grant staff access',()=>assert.equal(r.data.role,'customer'));
  r=await call(null,'/api/users/auth','POST',{email:'buyer@test.local',password:'wrong'});check('invalid login terminates with 401',()=>assert.equal(r.status,401));
  for(const [email,portal,status] of [['buyer@test.local','management',403],['shop@test.local','customer',403],['admin@test.local','customer',403],['buyer@test.local','customer',200],['shop@test.local','management',200]]){const auth=await call(null,'/api/users/auth','POST',{email,password:'TestOnly123!',portal});assert.equal(auth.status,status,'Portal separation: '+email+' '+portal);}console.log('PASS separate customer and management sign-in');
+ for(const email of ['outsider@gmail.com','name@nith.ac.in.evil.com','name@sub.nith.ac.in','name@@nith.ac.in']){assert.equal((await call(null,'/api/users','POST',{username:'Invalid Domain',email,password:'TestOnly123!'})).status,400);assert.equal(await User.countDocuments({email}),0);}
+ const campus=await call(null,'/api/users','POST',{username:'Campus Student',email:'  Student@NITH.AC.IN  ',password:'TestOnly123!'});assert.equal(campus.status,201);assert.equal(campus.data.email,'student@nith.ac.in');assert.equal(campus.data.role,'customer');
+ assert.equal((await call(buyer,'/api/users/profile','PUT',{email:'new-address@gmail.com'})).status,400);
+ assert.equal((await call(buyer,'/api/users/profile','PUT',{username:'Test Customer',email:buyer.email})).status,200);
+ console.log('PASS official campus domain, normalization, spoof rejection and profile bypass protection');
  r=await call(admin,'/api/users');check('Administrator cannot read private policies/accounts',()=>assert.equal(r.status,403));
  r=await call(shop,'/api/users/'+shop._id,'PUT',{deliveryPolicy:{deliveryCharge:0}});check('shopkeeper cannot change delivery policy',()=>assert.equal(r.status,403));
  r=await call(sa,'/api/users/'+shop._id,'PUT',{deliveryPolicy:{latePenalty:-1}});check('negative penalties rejected',()=>assert.equal(r.status,400));
@@ -68,7 +73,7 @@ test('API permissions, per-shop COD pricing, blacklisting and idempotent deliver
  g.deadline=new Date(Date.now()-60000);await order.save();
  await call(sa,'/api/users/'+shop._id,'PUT',{deliveryPolicy:{latePenalty:999,deliveryMinutes:120}});
  r=await call(admin,'/api/orders/'+id);check('Administrator cannot read deductions',()=>assert.equal(r.data.shopOrders[0].latePenalty,undefined));
- r=await call(sa,'/api/orders/'+id);check('SA sees snapshotted pending deduction',()=>assert.equal(r.data.shopOrders.find(g=>String(g.shopkeeper)===String(shop._id)).pendingDeduction,25));
+ r=await call(sa,'/api/orders/'+id);assert.equal(r.data.user.username,buyer.username);assert.equal(r.data.user.email,buyer.email);assert.equal(r.data.orderItems.length,2);check('SA sees snapshotted pending deduction',()=>assert.equal(r.data.shopOrders.find(g=>String(g.shopkeeper)===String(shop._id)).pendingDeduction,25));
  const delivery='/api/orders/'+id+'/shops/'+g._id+'/deliver';await call(shop,delivery,'PUT');await call(shop,delivery,'PUT');
  r=await call(sa,'/api/orders/'+id);check('late delivery recorded once at original penalty',()=>assert.equal(r.data.shopOrders.find(g=>String(g.shopkeeper)===String(shop._id)).deduction,25));
  const group2=order.shopOrders.find(g=>String(g.shopkeeper)===String(shop2._id));await call(shop2,'/api/orders/'+id+'/shops/'+group2._id+'/deliver','PUT');

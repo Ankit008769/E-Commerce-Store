@@ -5,9 +5,12 @@ import createToken from '../utils/createToken.js';
 import {roleOf,fail,numeric} from '../utils/marketplace.js';
 const identity = u => ({_id:u._id, username:u.username, email:u.email, role:roleOf(u), isAdmin:['superadmin','administrator'].includes(roleOf(u)), shopName:u.shopName, status:u.status || 'active'});
 const validEmail = s => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s || '');
+const campusEmail = value => /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@nith\.ac\.in$/i.test(String(value || '').trim());
 function credentials(b) { if (!b.username?.trim() || !validEmail(b.email) || typeof b.password !== 'string' || b.password.length < 8) fail('Enter a name, valid email, and password of at least 8 characters.'); }
 export const createUser = asyncHandler(async (req,res) => {
+ req.body.email=String(req.body.email || '').trim().toLowerCase();
  credentials(req.body);
+ if(!campusEmail(req.body.email))fail('Use your official NIT Hamirpur email address ending in @nith.ac.in.');
  const u = await User.create({username:req.body.username,email:req.body.email,password:await bcrypt.hash(req.body.password,10),role:'customer'});
  createToken(res,u._id); res.status(201).json(identity(u));
 });
@@ -24,7 +27,7 @@ export const getCurrentUserProfile = asyncHandler(async (req,res) => res.json(id
 export const updateCurrentUserProfile = asyncHandler(async (req,res) => {
  const u = await User.findById(req.user._id);
  if (req.body.username?.trim()) u.username = req.body.username.trim();
- if (req.body.email) { if (!validEmail(req.body.email)) fail('Enter a valid email.'); u.email=req.body.email; }
+ if (req.body.email) { const email=String(req.body.email).trim().toLowerCase();if (!validEmail(email)) fail('Enter a valid email.');if(roleOf(u)==='customer'&&email!==u.email&&!campusEmail(email))fail('Use your official NIT Hamirpur email address ending in @nith.ac.in.');u.email=email; }
  if (req.body.password) { if (req.body.password.length < 8) fail('Use at least 8 characters.'); u.password=await bcrypt.hash(req.body.password,10); }
  await u.save(); res.json(identity(u));
 });
