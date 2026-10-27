@@ -5,6 +5,7 @@ import * as c from '../controllers/userController.js';
 import {authenticate,authorizeSuperAdmin,authorizeStaff} from '../middlewares/authMiddleware.js';
 const r=express.Router();
 r.route('/').post(c.createUser).get(authenticate,authorizeSuperAdmin,c.getAllUsers);
+r.post('/registration-otp',c.requestRegistrationOtp);
 r.post('/auth',c.loginUser); r.post('/logout',c.logoutCurrentUser);
 r.route('/profile').get(authenticate,c.getCurrentUserProfile).put(authenticate,c.updateCurrentUserProfile);
 r.post('/staff',authenticate,authorizeSuperAdmin,c.createStaff);

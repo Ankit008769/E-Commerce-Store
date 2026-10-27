@@ -16,6 +16,9 @@ test('API permissions, per-shop COD pricing, blacklisting and idempotent deliver
  await mongoose.connection.dropDatabase();
  try {
  const User=await load('backend/models/userModel.js'),Product=await load('backend/models/productModel.js'),Order=await load('backend/models/orderModel.js');
+ const {setOtpMailSenderForTests}=await import(pathToFileURL(base+'/backend/utils/otpMailer.js'));
+ const codes=new Map();setOtpMailSenderForTests(async(email,code)=>codes.set(email,code));
+ const register=async(body)=>{const sent=await call(null,'/api/users/registration-otp','POST',{email:body.email});assert.equal(sent.status,200);return call(null,'/api/users','POST',{...body,challengeId:sent.data.challengeId,otp:codes.get(body.email.trim().toLowerCase())});};
  const password=await bcrypt.hash('TestOnly123!',10);
  const sa=await User.create({username:'Super Admin',email:'sa@test.local',password,role:'superadmin'});
  const admin=await User.create({username:'Administrator',email:'admin@test.local',password,role:'administrator'});
@@ -42,12 +45,13 @@ test('API permissions, per-shop COD pricing, blacklisting and idempotent deliver
  const productRequest=async(data)=>{const form=new FormData();for(const [key,value] of Object.entries(data))form.append(key,value);const response=await fetch('http://127.0.0.1:'+server.address().port+'/api/products',{method:'POST',headers:{Cookie:'jwt='+jwt.sign({userId:shop._id},process.env.JWT_SECRET)},body:form});return {status:response.status,data:await response.json()};};
  const missing=await productRequest({image:'/uploads/test.jpg',countInStock:1});assert.equal(missing.status,400);
  const unnamed=await productRequest({image:'/uploads/test.jpg',price:10,countInStock:1,shopkeeper:String(shop2._id)});assert.equal(unnamed.status,201);assert.equal(unnamed.data.name,'');assert.equal(String(unnamed.data.shopkeeper),String(shop._id));await Product.deleteOne({_id:unnamed.data._id});console.log('PASS photo and price required, name optional, seller ownership enforced');
- let r=await call(null,'/api/users','POST',{username:'New Customer',email:'new@nith.ac.in',password:'TestOnly123!',role:'superadmin',isAdmin:true});check('public registration cannot grant staff access',()=>assert.equal(r.data.role,'customer'));
+ let r=await register({username:'New Customer',email:'new@nith.ac.in',password:'TestOnly123!',role:'superadmin',isAdmin:true});check('public registration cannot grant staff access',()=>assert.equal(r.data.role,'customer'));
  r=await call(null,'/api/users/auth','POST',{email:'buyer@test.local',password:'wrong'});check('invalid login terminates with 401',()=>assert.equal(r.status,401));
  for(const [email,portal,status] of [['buyer@test.local','management',403],['shop@test.local','customer',403],['admin@test.local','customer',403],['buyer@test.local','customer',200],['shop@test.local','management',200]]){const auth=await call(null,'/api/users/auth','POST',{email,password:'TestOnly123!',portal});assert.equal(auth.status,status,'Portal separation: '+email+' '+portal);}console.log('PASS separate customer and management sign-in');
  for(const email of ['outsider@gmail.com','name@nith.ac.in.evil.com','name@sub.nith.ac.in','name@@nith.ac.in']){assert.equal((await call(null,'/api/users','POST',{username:'Invalid Domain',email,password:'TestOnly123!'})).status,400);assert.equal(await User.countDocuments({email}),0);}
- const campus=await call(null,'/api/users','POST',{username:'Campus Student',email:'  Student@NITH.AC.IN  ',password:'TestOnly123!'});assert.equal(campus.status,201);assert.equal(campus.data.email,'student@nith.ac.in');assert.equal(campus.data.role,'customer');
+ const campus=await register({username:'Campus Student',email:'  Student@NITH.AC.IN  ',password:'TestOnly123!'});assert.equal(campus.status,201);assert.equal(campus.data.email,'student@nith.ac.in');assert.equal(campus.data.role,'customer');
  assert.equal((await call(buyer,'/api/users/profile','PUT',{email:'new-address@gmail.com'})).status,400);
+ assert.equal((await call(buyer,'/api/users/profile','PUT',{email:'unverified-change@nith.ac.in',emailVerified:true})).status,400);
  assert.equal((await call(buyer,'/api/users/profile','PUT',{username:'Test Customer',email:buyer.email})).status,200);
  console.log('PASS official campus domain, normalization, spoof rejection and profile bypass protection');
  r=await call(admin,'/api/users');check('Administrator cannot read private policies/accounts',()=>assert.equal(r.status,403));

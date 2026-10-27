@@ -45,7 +45,7 @@ The test delivery and COD collection were simulated; no physical delivery or rea
 
 The requested college-project feature set and live COD demonstrations are complete. The full local regression run passed 17 tests with no skips, and the frontend production build passed. Online and local data are separate. Passwords are supplied privately, never in this document.
 
-This handover does not claim email ownership verification or automatic bank deductions: signup validates the `@nith.ac.in` domain only, and late penalties are ledger entries. Automated off-VM backups, online payments and a custom purchased domain are not configured. Menu stock and representative product photographs should be reviewed by the shops before accepting real student orders.
+New public signup now requires college email OTP verification. Existing accounts retain access and their original ownership; they are not automatically marked email-verified. Late penalties remain ledger entries, not automatic bank deductions. Automated off-VM backups, online payments and a custom purchased domain are not configured. Menu stock and representative product photographs should be reviewed by the shops before accepting real student orders.
 
 
 ## Operations
@@ -64,3 +64,14 @@ Persistent disk is not a separate backup. Automated off-VM backups are not yet c
 ## Billing
 
 This is an always-running Compute Engine VM, not scale-to-zero Cloud Run. VM, persistent disk, reserved external IP and network traffic may incur charges. Deployment was authorized with possible charges accepted. Billing is enabled; the remaining trial-credit balance was not independently verified. Review Google Cloud Billing before trial credits expire. Stopping the VM does not remove disk/IP charges.
+
+
+## College email OTP (28 October 2026)
+
+New registrations use POST `/api/users/registration-otp` to request a code, then POST `/api/users` with the returned `challengeId` and `otp` alongside name, email and password. The backend enforces the exact `nith.ac.in` domain and creates the customer only after consuming the code. Public requests cannot grant staff roles or set verification flags.
+
+Codes are random six-digit values stored as HMAC digests, expire after ten minutes, permit five attempts, and are consumed atomically across workers. Resending replaces the previous challenge. MongoDB-backed limits allow five sends per email per hour, twenty sends per IP per hour, and sixty verification requests per IP per hour; each email has a sixty-second resend wait. The reverse proxy must be trusted only on loopback. Tune limits carefully if many students share a campus NAT address.
+
+Configure `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` and optionally `SMTP_FROM`. Gmail uses `smtp.gmail.com`, port `587` with required STARTTLS and a Google App Password (not the account password). Local optional `.env.mail` and all `.env.*` secrets are excluded from Git and Docker build context. Production uses `/srv/campuscart/private/mail.env`, mode 600, supplied with a second `--env-file` when recreating the app container. Keep `--network host --pid host --uts host`, the existing app environment, and the uploads mount. Never embed mail credentials in the image. Missing SMTP configuration or mail failure blocks registration without creating an account; there is no production test-code fallback.
+
+Customer email edits are disabled until a separate verified email-change flow is implemented. Staff login does not use student signup OTP. Existing accounts are not retroactively verified. Gmail sending limits and deliverability apply; monitor bounces and move to a dedicated email service if campus demand exceeds the sender limits. The OTP test suite captures messages only under NODE_ENV=test and never sends real mail.

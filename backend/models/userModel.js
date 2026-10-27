@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 const schema = new mongoose.Schema({
  username: {type:String, required:true, trim:true}, email:{type:String, required:true, unique:true, lowercase:true, trim:true},
- password:{type:String, required:true}, isAdmin:{type:Boolean, default:false},
+ password:{type:String, required:true}, emailVerifiedAt:{type:Date}, isAdmin:{type:Boolean, default:false},
  role:{type:String, enum:['customer','shopkeeper','administrator','superadmin']},
  status:{type:String, enum:['active','blacklisted','removed'], default:'active'}, shopName:{type:String, trim:true},
  deliveryPolicy:{

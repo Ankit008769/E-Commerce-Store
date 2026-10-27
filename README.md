@@ -30,7 +30,7 @@ npm run build
 npm start
 ```
 
-Open http://localhost:5010/. Express serves the frontend and supports direct links. For an internet deployment, provide HTTPS, set `NODE_ENV=production` (secure cookies require HTTPS), and persist MongoDB plus `uploads/`. The current Google Cloud deployment and operating notes are in [DEPLOYMENT.md](DEPLOYMENT.md). Email ownership verification is not configured; signup checks the email domain only.
+Open http://localhost:5010/. Express serves the frontend and supports direct links. For an internet deployment, provide HTTPS, set `NODE_ENV=production` (secure cookies require HTTPS), and persist MongoDB plus `uploads/`. The current Google Cloud deployment and operating notes are in [DEPLOYMENT.md](DEPLOYMENT.md). New customer signup requires an emailed OTP; configure SMTP before accepting registrations (see DEPLOYMENT.md).
 
 ## First Super Administrator
 
@@ -106,7 +106,7 @@ This creates Booth 4 and 4H shopkeeper accounts and imports 108 and 58 menu vari
 
 Food photos under `uploads/menu-food` are representative, not shop-supplied. Original sources, authors and licenses are recorded in `backend/data/menus/food-photo-credits.json` and product descriptions. `product-photos.json` preserves the item-to-photo mapping for repeat imports.
 
-New public customer registration requires an exact `@nith.ac.in` email domain (case-insensitive). Changing a customer email uses the same rule. Existing accounts continue to sign in; staff creation remains Super Admin controlled. This is a domain check only, not email ownership verification. Super Admin can search orders by customer, email, product, shop or order ID.
+New public customer registration requires an exact `@nith.ac.in` email domain (case-insensitive) and a six-digit emailed OTP. Accounts are created only after verification. Codes expire after 10 minutes, allow five attempts, and can be resent after 60 seconds. Customer email changes are disabled to prevent verification bypass. Existing accounts continue to sign in and are not retroactively marked verified; staff creation remains Super Admin controlled. Super Admin can search orders by customer, email, product, shop or order ID.
 `node backend/utils/migrate4HCategories.mjs` updates an existing local 4H catalogue from the old Rate List category to food categories. Fresh imports use the updated menu CSV automatically.
 
 Campus delivery locations are shared by the header picker and checkout. The searchable catalogue includes 61 named hostels/buildings/areas, based on NITH hostel and Planning & Works pages (source URLs are stored with each entry), plus user-confirmed shop names. It is not an exhaustive live campus directory. Room/block/meeting-point details and a custom-address option cover missing locations. Category navigation stays in one scrollable row with previous/next buttons.

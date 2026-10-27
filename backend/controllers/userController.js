@@ -1,17 +1,22 @@
+import {requestEmailCode,consumeEmailCode} from '../utils/emailVerification.js';
 import User from '../models/userModel.js';
 import asyncHandler from '../middlewares/asyncHandler.js';
 import bcrypt from 'bcryptjs';
 import createToken from '../utils/createToken.js';
 import {roleOf,fail,numeric} from '../utils/marketplace.js';
-const identity = u => ({_id:u._id, username:u.username, email:u.email, role:roleOf(u), isAdmin:['superadmin','administrator'].includes(roleOf(u)), shopName:u.shopName, status:u.status || 'active'});
+const identity = u => ({_id:u._id, username:u.username, email:u.email, role:roleOf(u), isAdmin:['superadmin','administrator'].includes(roleOf(u)), shopName:u.shopName, status:u.status || 'active',emailVerified:!!u.emailVerifiedAt});
 const validEmail = s => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s || '');
 const campusEmail = value => /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@nith\.ac\.in$/i.test(String(value || '').trim());
 function credentials(b) { if (!b.username?.trim() || !validEmail(b.email) || typeof b.password !== 'string' || b.password.length < 8) fail('Enter a name, valid email, and password of at least 8 characters.'); }
+export const requestRegistrationOtp = asyncHandler(async(req,res)=>res.json(await requestEmailCode(req.body.email,req.ip)));
 export const createUser = asyncHandler(async (req,res) => {
  req.body.email=String(req.body.email || '').trim().toLowerCase();
  credentials(req.body);
  if(!campusEmail(req.body.email))fail('Use your official NIT Hamirpur email address ending in @nith.ac.in.');
- const u = await User.create({username:req.body.username,email:req.body.email,password:await bcrypt.hash(req.body.password,10),role:'customer'});
+ if(await User.exists({email:req.body.email}))fail('An account already exists for this email. Please sign in.',409);
+ const password=await bcrypt.hash(req.body.password,10);
+ await consumeEmailCode(req.body.email,req.body.challengeId,req.body.otp,req.ip);
+ let u;try{u=await User.create({username:req.body.username,email:req.body.email,password,role:'customer',emailVerifiedAt:new Date()});}catch(e){if(e.code===11000)fail('An account already exists for this email. Please sign in.',409);throw e;}
  createToken(res,u._id); res.status(201).json(identity(u));
 });
 export const loginUser = asyncHandler(async (req,res) => {
@@ -27,7 +32,7 @@ export const getCurrentUserProfile = asyncHandler(async (req,res) => res.json(id
 export const updateCurrentUserProfile = asyncHandler(async (req,res) => {
  const u = await User.findById(req.user._id);
  if (req.body.username?.trim()) u.username = req.body.username.trim();
- if (req.body.email) { const email=String(req.body.email).trim().toLowerCase();if (!validEmail(email)) fail('Enter a valid email.');if(roleOf(u)==='customer'&&email!==u.email&&!campusEmail(email))fail('Use your official NIT Hamirpur email address ending in @nith.ac.in.');u.email=email; }
+ if (req.body.email) { const email=String(req.body.email).trim().toLowerCase();if (!validEmail(email)) fail('Enter a valid email.');if(roleOf(u)==='customer'&&email!==u.email)fail('Customer email cannot be changed here. Contact the Super Administrator for help.');u.email=email; }
  if (req.body.password) { if (req.body.password.length < 8) fail('Use at least 8 characters.'); u.password=await bcrypt.hash(req.body.password,10); }
  await u.save(); res.json(identity(u));
 });

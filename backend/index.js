@@ -25,6 +25,7 @@ const recovered=await recoverCheckouts();
 if(recovered)console.log(`Recovered ${recovered} interrupted checkouts.`);
 
 const app = express();
+app.set('trust proxy','loopback');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
