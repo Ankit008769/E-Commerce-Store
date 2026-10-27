@@ -29,7 +29,24 @@ Verified against the real HTTPS domain:
 - Seller delivery confirmation, customer delivered history and Super Admin order visibility.
 - Mobile viewport, uploaded image retrieval, and persistence after an application restart.
 
+Additional live acceptance checks completed on 28 October 2026:
+
+| Scenario | Order | Verified result |
+| --- | --- | --- |
+| 4H-only COD | `6ae11170fb595fcce67d99c7` | ₹45; shopkeeper completion appears as delivered in customer history |
+| Booth 4 + 4H COD | `6ae111c9fb595fcce67d9b17` | ₹115; each shop sees only its own items; cross-shop completion denied; partial then full delivery verified |
+| One on-time, one late | `6ae11241fb595fcce67d9e10` | Booth 4 ₹0 deduction; 4H ₹20 deduction; SA ledger verified; customer deduction hidden |
+
+Temporary shop policies were restored immediately after the late-test order was created. Existing test orders and their snapshotted policies remain as verification records. The final read-only check confirmed HTTPS health, fresh customer login, the delivered order and persistent uploaded photo without creating another order.
+
 The test delivery and COD collection were simulated; no physical delivery or real cash collection occurred.
+
+## Handover scope
+
+The requested college-project feature set and live COD demonstrations are complete. The full local regression run passed 17 tests with no skips, and the frontend production build passed. Online and local data are separate. Passwords are supplied privately, never in this document.
+
+This handover does not claim email ownership verification or automatic bank deductions: signup validates the `@nith.ac.in` domain only, and late penalties are ledger entries. Automated off-VM backups, online payments and a custom purchased domain are not configured. Menu stock and representative product photographs should be reviewed by the shops before accepting real student orders.
+
 
 ## Operations
 
