@@ -30,7 +30,7 @@ npm run build
 npm start
 ```
 
-Open http://localhost:5010/. Express serves the frontend and supports direct links. For an internet deployment, provide HTTPS, set `NODE_ENV=production` (secure cookies require HTTPS), and persist MongoDB plus `uploads/`. Hosting and email ownership verification are not configured by this local college demo.
+Open http://localhost:5010/. Express serves the frontend and supports direct links. For an internet deployment, provide HTTPS, set `NODE_ENV=production` (secure cookies require HTTPS), and persist MongoDB plus `uploads/`. The current Google Cloud deployment and operating notes are in [DEPLOYMENT.md](DEPLOYMENT.md). Email ownership verification is not configured; signup checks the email domain only.
 
 ## First Super Administrator
 
@@ -127,3 +127,7 @@ Campus delivery locations are shared by the header picker and checkout. The sear
 The full suite covers permissions, customer order isolation, independent shop fees and deliveries, blacklisting, stock contention, duplicate checkout/retry, rollback, crash recovery and two backend processes on the same host. Browser checks cover staff role filters, both shopkeeper product forms, mobile navigation, account switching, and the customer-to-shopkeeper COD flow.
 
 The explicitly labelled local Booth 4 test order `6adfb6827db56756959b911e` was placed for one Aloo Tikki Burger (₹40 + ₹30 delivery) and marked delivered as a test. Customer history and shopkeeper deliveries both reflect completion. No physical delivery or actual cash collection was performed by this test.
+
+## Live website
+
+[CampusCart storefront](https://campuscart.34.93.237.251.sslip.io/) · [Staff sign-in](https://campuscart.34.93.237.251.sslip.io/admin/login). See [deployment details](DEPLOYMENT.md) for the Google Cloud project, persistent storage, verification and billing notes. Local and online databases are independent.

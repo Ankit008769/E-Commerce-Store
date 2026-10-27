@@ -1,34 +1,49 @@
-# Internet deployment handoff
+# CampusCart live deployment
 
-Status: deployment preparation only. No hosting account, cloud database or public URL has been provisioned.
+Verified 28 October 2026.
 
-The repository contains a production Docker image definition and `/api/health` readiness endpoint. Secrets are excluded from the image context. Docker is not installed in the current workspace, so the image itself has not been built here.
+- Storefront: https://campuscart.34.93.237.251.sslip.io/
+- Staff sign-in: https://campuscart.34.93.237.251.sslip.io/admin/login
+- Google Cloud project: `campuscart-512806`
+- VM: `campuscart-web`, zone `asia-south1-a`, `e2-small`, 20 GB persistent boot disk
+- Reserved address: `campuscart-ip`, `34.93.237.251`
+- HTTP/HTTPS ingress: `campuscart-web` firewall rule. MongoDB is bound to localhost only and requires authentication.
 
-## Services needed
+## Runtime
 
-1. A Node/Express-capable host, with HTTPS and one public origin serving both frontend and API. Build: `npm ci && npm ci --prefix frontend && npm run build`. Start: `npm start`. Set health check `/api/health`.
-2. A MongoDB database reachable from that host. The laptop's `127.0.0.1` database cannot be used by a remote host.
-3. Durable product-photo storage. Repository menu photos ship with the app, but later uploads currently go to `uploads/`. Ephemeral hosts need external storage or a persistent disk. Mounting an empty disk over `uploads/` hides bundled photos; copy them onto the disk before serving it.
-4. Runtime environment: `NODE_ENV=production`, `MONGO_URI`, a newly generated private `JWT_SECRET`, and the hosting provider's `PORT`. HTTPS is required for production login cookies. Never commit credentials or paste them into project documentation.
+Caddy provides HTTPS and redirects HTTP. `campuscart-app`, `campuscart-mongo`, and `campuscart-proxy` are Docker containers with restart policies. Source, database, uploads and TLS state live under `/srv/campuscart` on the VM disk. Secrets are in root-protected `/srv/campuscart/private/`; they are not stored in Git or the image.
 
-## Important current hosting constraint
+The app container uses `--network host --pid host --uts host` so its checkout recovery sees the VM's actual process IDs and stable hostname. Do not replace this with isolated PID/hostname namespaces or scale to additional machines without adapting checkout recovery. App uploads mount `/srv/campuscart/uploads` at `/app/uploads`.
 
-The tested checkout recovery implementation supports processes in the same OS PID namespace. It intentionally does not reclaim reservations from an unknown host. Container replacement and multi-host platforms cannot yet guarantee automatic checkout recovery after a crash. Before enabling public orders on Render/Railway or another container platform, adapt checkout to MongoDB replica-set transactions and test crash/retry behavior there. A Dockerfile alone does not remove this requirement.
+The VM boots Ubuntu's supported `6.8.0-147-generic` kernel because the default `7.0.0-1014-gcp` image triggered MongoDB's documented kernel compatibility guard. Boot selection is in `/etc/default/grub.d/99-campuscart-kernel.cfg`. Maintain supported kernel security updates and update the boot selection when upgrading; do not bypass MongoDB's guard.
 
-For a persistent single-machine deployment using ordinary Node processes, retain the host identity and PID namespace, run a single service manager, and restart the backend on that same machine. Do not scale to multiple machines with the current recovery implementation.
+## Data and tests
 
-## Provider choice
+The initial migration copied 11 accounts, 196 products, 35 categories, 21 historical orders and 5 completed checkout records. There were no pending checkout reservations. Local and online databases are separate after migration; changes are not automatically synchronized.
 
-- Free Render sleeps after inactivity and does not persist uploaded files. It needs cloud photo storage and the checkout change described above before taking real orders.
-- Paid hosting with a persistent disk avoids losing uploads, but container/PID replacement still needs the checkout change.
-- A persistent Linux VM with MongoDB and uploads on durable disk can retain the currently tested same-host recovery model. It needs server administration, HTTPS and backups.
+Verified against the real HTTPS domain:
 
-Official references: https://render.com/docs/free and https://render.com/docs/disks
+- Customer, Booth 4 shopkeeper and Super Administrator sign-in.
+- Secure, HttpOnly login cookies and denied customer access to account administration.
+- One labelled test COD order: `6ae0d3cdcd167aba9c94dd6c`, ₹40 item + ₹30 delivery = ₹70.
+- Seller delivery confirmation, customer delivered history and Super Admin order visibility.
+- Mobile viewport, uploaded image retrieval, and persistence after an application restart.
 
-## Account and migration steps
+The test delivery and COD collection were simulated; no physical delivery or real cash collection occurred.
 
-The owner must sign into their chosen hosting and database accounts directly. Do not send passwords in chat. Confirm the hosting plan before creating billable resources.
+## Operations
 
-Before publishing an existing database, replace shared demo/staff passwords and disable unneeded demo accounts. Preserve customer/order ownership; do not copy orders between users. Back up the original database and uploads, then migrate to a separate cloud target and verify counts. Do not run the destructive old seeder.
+```sh
+gcloud compute ssh campuscart-web --project=campuscart-512806 --zone=asia-south1-a
+sudo docker ps
+sudo docker logs --tail 100 campuscart-app
+sudo docker restart campuscart-app
+```
 
-Final acceptance on the actual HTTPS domain: registration/login, upload followed by restart, per-shop checkout, customer-only history, seller delivery, SA deductions, stock contention, retry after connection loss, and restart recovery. Until these checks pass, the project has not been verified as a live service.
+Health endpoint: `/api/health`. On a future release, build a new image from the updated Git revision, retain the existing database/uploads/env files, stop the old app process, then recreate the app with the same host namespace flags and volume mappings. Do not re-import the original migration snapshot over the online database.
+
+Persistent disk is not a separate backup. Automated off-VM backups are not yet configured. Back up MongoDB and uploads before VM/disk deletion or migrations. Deleting the VM can delete its boot disk; preserve/snapshot the disk first. The HTTPS hostname uses sslip.io DNS and the reserved IP; a custom domain can replace it later.
+
+## Billing
+
+This is an always-running Compute Engine VM, not scale-to-zero Cloud Run. VM, persistent disk, reserved external IP and network traffic may incur charges. Deployment was authorized with possible charges accepted. Billing is enabled; the remaining trial-credit balance was not independently verified. Review Google Cloud Billing before trial credits expire. Stopping the VM does not remove disk/IP charges.
