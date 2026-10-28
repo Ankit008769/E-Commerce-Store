@@ -7,7 +7,7 @@ import {smtpConfigured,sendVerificationCode} from './otpMailer.js';
 export const normalEmail=value=>String(value||'').trim().toLowerCase();
 export const isCampusEmail=email=>/^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@nith\.ac\.in$/i.test(email)&&email.length<=254;
 const digest=value=>createHmac('sha256',process.env.JWT_SECRET).update(value).digest('hex');
-async function rateLimit(scope,value,limit){
+export async function rateLimit(scope,value,limit){
  const now=Date.now(),window=Math.floor(now/3600000),id=scope+':'+window+':'+digest(value),update={$inc:{hits:1},$setOnInsert:{expiresAt:new Date((window+1)*3600000)}};
  let bucket;try{bucket=await AuthRate.findOneAndUpdate({_id:id},update,{upsert:true,new:true});}catch(e){if(e.code!==11000)throw e;bucket=await AuthRate.findOneAndUpdate({_id:id},{$inc:{hits:1}},{new:true});}
  if(bucket.hits>limit)fail('Too many verification requests. Please try again later.',429);

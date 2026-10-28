@@ -1,10 +1,12 @@
+import {solveChallenge} from 'altcha-lib';
+import {deriveKey} from 'altcha-lib/algorithms/pbkdf2';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import mongoose from 'mongoose';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 const uri=process.env.MARKETPLACE_TEST_URI;
-test('College signup requires an expiring, single-use email OTP across servers',{skip:!uri,timeout:60000},async t=>{
+test('College signup requires an expiring, single-use email OTP across servers',{skip:!uri,timeout:90000},async t=>{
  if(!/^mongodb:\/\/127\.0\.0\.1:\d+\/campuscart_test[a-z0-9_]*$/.test(uri))throw new Error('Use an isolated localhost test database.');
  process.env.NODE_ENV='test';process.env.JWT_SECRET='isolated-otp-test-secret';
  await mongoose.connect(uri+'_otp');
@@ -17,7 +19,7 @@ test('College signup requires an expiring, single-use email OTP across servers',
  const sender=async(email,code)=>{codes.set(email,code);sendCount++;};
  const servers=[];
  for(let i=0;i<2;i++){const app=express();app.use(express.json());app.use(cookieParser());app.use('/api/users',routes);servers.push(await new Promise(resolve=>{const server=app.listen(0,'127.0.0.1',()=>resolve(server));}));}
- async function call(path,body,index=0){const response=await fetch('http://127.0.0.1:'+servers[index].address().port+'/api/users'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});return {status:response.status,data:await response.json()};}
+ async function call(path,body,index=0){const purpose=path===''?'signup':'otp';const challenge=await(await fetch('http://127.0.0.1:'+servers[index].address().port+'/api/users/captcha?purpose='+purpose)).json();const solution=await solveChallenge({challenge,deriveKey});body={...body,altcha:Buffer.from(JSON.stringify({challenge,solution})).toString('base64')};const response=await fetch('http://127.0.0.1:'+servers[index].address().port+'/api/users'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});return {status:response.status,data:await response.json()};}
  async function reset(){await Promise.all([User.deleteMany({}),EmailOtp.deleteMany({}),AuthRate.deleteMany({})]);codes.clear();sendCount=0;setOtpMailSenderForTests(sender);}
  const email='student@nith.ac.in',details={username:'Student',email,password:'TestOnly123!',role:'superadmin',emailVerified:true};
  async function send(value=email,index=0){return call('/registration-otp',{email:value},index);}

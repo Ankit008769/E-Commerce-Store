@@ -1,3 +1,5 @@
+import notificationRoutes from './routes/notificationRoutes.js';
+import {startOrderNotifications} from './utils/orderPush.js';
 import {recoverCheckouts} from './utils/checkoutRecovery.js';
 // packages
 import path from "path";
@@ -35,6 +37,7 @@ app.get('/api/health', (req,res) => {
   const ready=mongoose.connection.readyState===1;
   res.status(ready?200:503).json({status:ready?'ok':'unavailable'});
 });
+app.use("/api/notifications",notificationRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/products", productRoutes);
@@ -53,4 +56,5 @@ app.get("*", (req, res) => {
 });
 app.use((error, req, res, next) => res.status(error.status || 500).json({message: error.message}));
 
+startOrderNotifications();
 app.listen(port, () => console.log(`Server running on port: ${port}`));

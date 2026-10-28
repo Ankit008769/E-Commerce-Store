@@ -1,0 +1,20 @@
+import express from 'express';
+import asyncHandler from '../middlewares/asyncHandler.js';
+import {authenticate,allowRoles} from '../middlewares/authMiddleware.js';
+import {fail} from '../utils/marketplace.js';
+import {pushConfigured,validPushSubscription,sendPush} from '../utils/orderPush.js';
+import PushSubscription from '../models/pushSubscriptionModel.js';
+import Order from '../models/orderModel.js';
+const router=express.Router();router.use(authenticate,allowRoles('shopkeeper'));
+router.get('/key',(req,res)=>res.json({enabled:pushConfigured(),publicKey:process.env.VAPID_PUBLIC_KEY||''}));
+router.post('/subscribe',asyncHandler(async(req,res)=>{
+ if(!pushConfigured())fail('Browser notifications are temporarily unavailable.',503);
+ if(!validPushSubscription(req.body))fail('Invalid browser push subscription.');
+ const previous=await PushSubscription.findOne({endpoint:req.body.endpoint});
+ const cursor=previous&&String(previous.user)===String(req.user._id)?{}:{cursorAt:new Date(),cursorId:''};
+ await PushSubscription.findOneAndUpdate({endpoint:req.body.endpoint},{$set:{user:req.user._id,keys:req.body.keys,...cursor},...(Object.keys(cursor).length?{$unset:{leaseUntil:1}}:{})},{upsert:true});res.json({subscribed:true});
+}));
+router.post('/unsubscribe',asyncHandler(async(req,res)=>{await PushSubscription.deleteOne({endpoint:req.body.endpoint,user:req.user._id});res.json({subscribed:false});}));
+router.post('/test',asyncHandler(async(req,res)=>{const sub=await PushSubscription.findOne({endpoint:req.body.endpoint,user:req.user._id});if(!sub)fail('Enable notifications first.');try{await sendPush(sub,{title:'CampusCart notifications enabled',body:'New orders for your shop will appear here.',shopkeeper:String(req.user._id),test:true});}catch{fail('Could not send the test notification. Please enable notifications again.',503);}res.json({sent:true});}));
+router.get('/pending',asyncHandler(async(req,res)=>{const orders=await Order.find({shopOrders:{$elemMatch:{shopkeeper:req.user._id,deliveredAt:null}}}).sort({createdAt:-1}).limit(100).select('_id createdAt');res.json(orders);}));
+export default router;

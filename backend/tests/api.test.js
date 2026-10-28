@@ -1,3 +1,5 @@
+import {solveChallenge} from 'altcha-lib';
+import {deriveKey} from 'altcha-lib/algorithms/pbkdf2';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
@@ -8,7 +10,7 @@ const require=createRequire(base+'/package.json');
 const express=require('express'),mongoose=require('mongoose'),cookieParser=require('cookie-parser'),jwt=require('jsonwebtoken'),bcrypt=require('bcryptjs');
 const load=async p=>(await import(pathToFileURL(base+'/'+p))).default;
 const uri=process.env.MARKETPLACE_TEST_URI;
-test('API permissions, per-shop COD pricing, blacklisting and idempotent delivery', {skip:!uri,timeout:30000}, async()=>{
+test('API permissions, per-shop COD pricing, blacklisting and idempotent delivery', {skip:!uri,timeout:90000}, async()=>{
  if(!/^mongodb:\/\/127\.0\.0\.1:\d+\/campuscart_test[a-z0-9_]*$/.test(uri))throw new Error('Use only an isolated localhost campuscart_test database.');
  process.env.JWT_SECRET='isolated-test-secret-not-for-production';process.env.NODE_ENV='test';
  let server;
@@ -40,7 +42,7 @@ test('API permissions, per-shop COD pricing, blacklisting and idempotent deliver
  app.use('/api/users',await load('backend/routes/userRoutes.js'));app.use('/api/products',await load('backend/routes/productRoutes.js'));app.use('/api/orders',await load('backend/routes/orderRoutes.js'));
  app.use(express.static(base+'/frontend/dist'));app.get('*',(req,res)=>res.sendFile(base+'/frontend/dist/index.html'));
  server=await new Promise(resolve=>{const s=app.listen(0,'127.0.0.1',()=>resolve(s));});
- const call=async(user,url,method='GET',body)=>{const response=await fetch('http://127.0.0.1:'+server.address().port+url,{method,headers:{'Content-Type':'application/json',...(user?{Cookie:'jwt='+jwt.sign({userId:user._id},process.env.JWT_SECRET)}:{})},body:body?JSON.stringify(body):undefined});return {status:response.status,data:await response.json()};};
+ const call=async(user,url,method='GET',body)=>{if(method==='POST'&&['/api/users/auth','/api/users','/api/users/registration-otp','/api/users/profile/verification-code'].includes(url)){const purpose=url==='/api/users/auth'?'login':url==='/api/users'?'signup':'otp';const challenge=await (await fetch('http://127.0.0.1:'+server.address().port+'/api/users/captcha?purpose='+purpose)).json();const solution=await solveChallenge({challenge,deriveKey});body={...body,altcha:Buffer.from(JSON.stringify({challenge,solution})).toString('base64')};}const response=await fetch('http://127.0.0.1:'+server.address().port+url,{method,headers:{'Content-Type':'application/json',...(user?{Cookie:'jwt='+jwt.sign({userId:user._id},process.env.JWT_SECRET)}:{})},body:body?JSON.stringify(body):undefined});return {status:response.status,data:await response.json()};};
  const check=(label,fn)=>{fn();console.log('PASS '+label);};
  const productRequest=async(data)=>{const form=new FormData();for(const [key,value] of Object.entries(data))form.append(key,value);const response=await fetch('http://127.0.0.1:'+server.address().port+'/api/products',{method:'POST',headers:{Cookie:'jwt='+jwt.sign({userId:shop._id},process.env.JWT_SECRET)},body:form});return {status:response.status,data:await response.json()};};
  const missing=await productRequest({image:'/uploads/test.jpg',countInStock:1});assert.equal(missing.status,400);
