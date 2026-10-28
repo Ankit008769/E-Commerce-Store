@@ -60,3 +60,17 @@ export const deleteUserById = asyncHandler(async (req,res) => {
  if (roleOf(u)==='superadmin') fail('Cannot remove a Super Administrator.',403);
  u.status='removed'; await u.save(); res.json({message:'Account removed; history retained.'});
 });
+
+export const requestProfileOtp=asyncHandler(async(req,res)=>{
+ if(roleOf(req.user)!=='customer')fail('Email verification is for customer accounts.',403);
+ if(req.user.emailVerifiedAt)return res.json({alreadyVerified:true,user:identity(req.user)});
+ res.json(await requestEmailCode(req.user.email,req.ip,req.user._id));
+});
+export const verifyProfileEmail=asyncHandler(async(req,res)=>{
+ if(roleOf(req.user)!=='customer')fail('Email verification is for customer accounts.',403);
+ if(req.user.emailVerifiedAt)return res.json(identity(req.user));
+ await consumeEmailCode(req.user.email,req.body.challengeId,req.body.otp,req.ip,req.user._id);
+ const user=await User.findOneAndUpdate({_id:req.user._id,email:req.user.email,status:'active'},{$set:{emailVerifiedAt:new Date()}},{new:true});
+ if(!user)fail('Account changed. Please sign in again.',409);
+ res.json(identity(user));
+});

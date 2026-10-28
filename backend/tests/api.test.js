@@ -205,5 +205,23 @@ test('API permissions, per-shop COD pricing, blacklisting and idempotent deliver
  assert.equal((await Product.findById(saveA._id)).countInStock,1);assert.equal((await Product.findById(saveB._id)).countInStock,1);
  console.log('PASS committed write with lost acknowledgement: no incorrect restock and no duplicate on retry');
 
+ // Existing-account verification must preserve identity, credentials and all orders.
+ await User.updateOne({_id:buyer._id},{$set:{email:'legacy@nith.ac.in'}});
+ const beforeAccount=await User.findById(buyer._id).lean(),beforeOrders=await Order.find({user:buyer._id}).sort({_id:1}).lean(),beforeCount=await User.countDocuments();
+ assert.equal((await call(null,'/api/users/profile/verification-code','POST',{})).status,401);
+ assert.equal((await call(shop,'/api/users/profile/verification-code','POST',{})).status,403);
+ const verification=await call(buyer,'/api/users/profile/verification-code','POST',{email:'someone-else@nith.ac.in'});assert.equal(verification.status,200);assert(codes.has('legacy@nith.ac.in'));assert.equal(codes.has('someone-else@nith.ac.in'),false);
+ const proof={challengeId:verification.data.challengeId,otp:codes.get('legacy@nith.ac.in')};
+ assert.equal((await call(other,'/api/users/profile/verify-email','POST',proof)).status,400);
+ const {consumeEmailCode}=await import(pathToFileURL(base+'/backend/utils/emailVerification.js'));
+ await assert.rejects(consumeEmailCode('legacy@nith.ac.in',proof.challengeId,proof.otp,'isolated-purpose-test'));
+ assert.equal((await call(buyer,'/api/users/profile/verify-email','POST',{...proof,otp:proof.otp==='000000'?'111111':'000000'})).status,400);
+ const verified=await call(buyer,'/api/users/profile/verify-email','POST',proof);assert.equal(verified.status,200);assert.equal(verified.data._id,String(buyer._id));assert.equal(verified.data.emailVerified,true);
+ const afterAccount=await User.findById(buyer._id).lean();for(const field of ['email','username','password','role','status'])assert.equal(afterAccount[field],beforeAccount[field]);assert.equal(await User.countDocuments(),beforeCount);
+ assert.deepEqual(await Order.find({user:buyer._id}).sort({_id:1}).lean(),beforeOrders);
+ assert.equal((await call(buyer,'/api/users/profile/verification-code','POST',{})).data.alreadyVerified,true);
+ assert.equal((await call(buyer,'/api/users/profile')).data.emailVerified,true);
+ console.log('PASS existing email verification: authenticated account binding, wrong-code rejection, purpose binding, same account/password/orders, persisted verified status');
+
  } finally {if(server)await new Promise(r=>server.close(r));await mongoose.connection.dropDatabase();await mongoose.disconnect();}
 });
