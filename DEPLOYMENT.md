@@ -51,7 +51,7 @@ New public signup now requires college email OTP verification. Existing accounts
 ## Operations
 
 ```sh
-gcloud compute ssh campuscart-web --project=campuscart-512806 --zone=asia-south1-a
+gcloud compute ssh campuscart-web --project=campuscart-512806 --zone=asia-south1-a --tunnel-through-iap
 sudo docker ps
 sudo docker logs --tail 100 campuscart-app
 sudo docker restart campuscart-app
@@ -97,3 +97,8 @@ Login (including staff login), signup and OTP sends require a self-hosted ALTCHA
 If the browser grants notification permission but refuses Push subscription, the workspace explicitly offers site-open desktop alerts using the same service worker and a 15-second pending-order poll. This fallback cannot alert after the site is closed. The chosen mode is labelled in the workspace and can be disabled. Headless Chrome rejected background registration during verification; fallback desktop alerts are tested separately from server push dispatch.
 
 Notification/CAPTCHA release `5190502` is deployed as `campuscart:alerts-20261028` (also `campuscart:release`). Backup: `/srv/campuscart/private/backups/pre-alerts-20261028.archive.gz`; rollback container: `campuscart-app-pre-alerts`. All 26 regression tests passed before deployment. Final live checks passed for both campus shopkeepers: CAPTCHA login, single-use replay rejection, authenticated notification configuration, pending deliveries and service-worker availability. Live automated Chrome displayed a real desktop test notification using the explicitly labelled site-open fallback; background push registration was rejected by that automated browser, so end-to-end background delivery is not claimed. The test subscription/alert mode was disabled afterward. No customer order was placed by these release checks.
+
+## Security hardening (29 October 2026)
+Public SSH/RDP is denied for the `campuscart-web` VM tag. Use `--tunnel-through-iap` for both `gcloud compute ssh` and `gcloud compute scp`; Google IAP permissions are required. The higher-priority `campuscart-allow-iap-ssh` rule permits port 22 only from Google's IAP TCP forwarding range; `campuscart-deny-public-admin` overrides the default public rules for ports 22/3389 on this VM. HTTP/HTTPS stay public. MongoDB, backend port 5010 and Caddy administration bind to loopback.
+
+Current security image: `campuscart:security-hardening-20261029`. Rollback container: `campuscart-app-pre-security-hardening`; a private pre-release MongoDB backup was retained. Keep `--network host --pid host --uts host` and the existing env/upload mounts during redeployments. See `SECURITY_REVIEW.md` for protections and outstanding operational work.

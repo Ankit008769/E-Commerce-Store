@@ -26,3 +26,10 @@ Checks include CSRF, NoSQL/prototype keys, oversized input, error redaction, rol
 5. Existing uploaded files were not bulk rewritten, and existing user passwords were not reset. Production records and order history were preserved.
 
 Configuration: set PUBLIC_ORIGIN to the exact trusted HTTPS origin when changing domains. HOST defaults to 127.0.0.1; expose traffic through the reverse proxy. Keep JWT/SMTP/VAPID/database secrets outside source control. Do not relax CSP or origin checks globally to fix an integration; add only the required trusted origins after review.
+
+## Live verification completed
+- Security image healthy; existing customer, shopkeeper and Super Admin logins and authorized endpoints passed. No production order was created and the historical test order remained unchanged.
+- Confirmed headers, cross-site rejection, operator-key rejection, oversized/malformed-body handling, redacted validation errors, real-image serving, forged-image rejection, and server-side logout token revocation.
+- Browser storefront, product details and login/CAPTCHA rendering worked without console errors. Actual sign-in/CAPTCHA verification was exercised through the API; the browser CAPTCHA was not solved during this check.
+- CampusCart-tagged firewall rules now deny public SSH/RDP while permitting Google-authenticated IAP SSH. IAP access was re-tested after enforcement and a direct public port-22 connection failed. Backend, MongoDB and Caddy admin listeners are loopback only.
+- Future SSH/SCP commands must use `--tunnel-through-iap`. Existing website HTTPS remains available.
