@@ -110,3 +110,5 @@ dialog::backdrop { background:#0007;backdrop-filter:blur(2px); }
 @media(max-width:850px){.customer-app .detail-layout{grid-template-columns:minmax(0,1fr);gap:18px}.customer-app .detail-image{max-height:360px}.customer-app .detail-layout .panel{padding:0}.customer-app .detail-layout h1{font-size:30px}}
 
 .item-instructions{margin:16px 0;min-width:0;max-width:100%}.item-instructions label{font-size:13px!important;max-width:100%!important}.item-instructions textarea{resize:vertical;width:100%;min-height:70px}.item-instructions small{display:block;font-size:11px;line-height:1.5}.item-note{display:block;color:#52674e;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere;margin-top:6px}.cart-item-details{min-width:0;flex:1}.cart-row .item-instructions{max-width:480px}.drawer-item .item-instructions{margin:10px 0}.total-row>span{min-width:0;overflow-wrap:anywhere}
+
+.cart-row{flex-wrap:wrap}.cart-row>.item-instructions{flex-basis:100%;max-width:100%;margin:4px 0}.drawer-item{display:grid;grid-template-columns:50px minmax(0,1fr) auto;align-items:center}.drawer-item>.item-instructions{grid-column:1/-1;margin:4px 0}
