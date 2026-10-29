@@ -1,3 +1,5 @@
+import {checkPrintPdf} from '../utils/safePrintPdf.js';
+import {inputGuard} from '../middlewares/security.js';
 import express from 'express';
 import multer from 'multer';
 import mongoose from 'mongoose';
@@ -14,11 +16,12 @@ import Order from '../models/orderModel.js';
 const r=express.Router(),upload=multer({storage:multer.memoryStorage(),limits:{fileSize:10*1024*1024,files:1,fields:5}});
 const bucket=()=>new mongoose.mongo.GridFSBucket(mongoose.connection.db,{bucketName:'privatePrintFiles'});
 r.use(authenticate);
-r.post('/jobs',allowRoles('customer'),asyncHandler(async(req,res,next)=>{await rateLimit('print-upload',String(req.user._id),10);next();}),upload.single('file'),asyncHandler(async(req,res)=>{
+r.post('/jobs',allowRoles('customer'),asyncHandler(async(req,res,next)=>{await rateLimit('print-upload',String(req.user._id),10);next();}),upload.single('file'),inputGuard,asyncHandler(async(req,res)=>{
  if(!req.file||req.file.buffer.subarray(0,5).toString()!=='%PDF-')fail('Upload a valid PDF up to 10 MB.');
  const shop=await User.findOne({_id:req.body.shopkeeper,role:'shopkeeper',status:'active','shopSettings.printEnabled':true});if(!shop)fail('Choose an active print shop.');
  const copies=numeric(req.body.copies??1,'Copies',1,100);if(!Number.isInteger(copies))fail('Copies must be whole.');
  let pdf;try{pdf=await PDFDocument.load(req.file.buffer,{ignoreEncryption:false,updateMetadata:false});}catch{fail('PDF could not be read. Encrypted or malformed documents are not accepted.');}
+ checkPrintPdf(pdf);
  const pages=pdf.getPageCount();if(pages<1||pages>500)fail('Use a PDF with between 1 and 500 pages.');
  const colour=req.body.colour==='true',unitRate=colour?shop.shopSettings.colourRate:shop.shopSettings.blackWhiteRate,price=money(pages*copies*unitRate);
  const stream=bucket().openUploadStream(randomUUID()+'.pdf',{metadata:{owner:req.user._id,shopkeeper:shop._id}});await new Promise((resolve,reject)=>{stream.on('finish',resolve);stream.on('error',reject);stream.end(req.file.buffer);});

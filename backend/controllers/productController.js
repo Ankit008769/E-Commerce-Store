@@ -16,7 +16,8 @@ async function fields(req,old) {
  const shopkeeper=roleOf(req.user)==='shopkeeper' ? req.user._id : b.shopkeeper || old?.shopkeeper;
  const shop=await User.findOne({_id:shopkeeper,role:'shopkeeper',status:'active'});
  if (!shop) fail('Assign this product to an active shopkeeper.');
- if (!b.image || !/^(\/uploads\/|https?:\/\/)/.test(b.image)) fail('Upload a product photo.');
+ if (typeof b.image!=='string'||b.image.length>2048||!/^(\/uploads\/|https?:\/\/)/.test(b.image)) fail('Upload a product photo.');
+ for(const [key,max] of [['name',150],['description',4000],['brand',100]])if(b[key]!==undefined&&(typeof b[key]!=='string'||b[key].length>max))fail(key+' is too long or invalid.');
  const stock=numeric(b.countInStock ?? 1,'Stock',0,100000); if (!Number.isInteger(stock)) fail('Stock must be a whole number.');
  return {name:String(b.name || '').trim(),image:b.image,description:String(b.description || ''),brand:String(b.brand || ''),category:b.category === undefined ? old?.category : b.category || undefined,price:numeric(b.price,'Price',0.01),countInStock:stock,shopkeeper};
 }
@@ -34,7 +35,7 @@ export const addProductReview=asyncHandler(async(req,res)=>{
  const p=await Product.findOne({_id:req.params.id,printOwner:{$exists:false},shopkeeper:{$in:await activeShops()}});if(!p)fail('Product unavailable.',404);
  if(!await Order.exists({user:req.user._id,isDelivered:true,deliveredAt:{$gte:new Date(Date.now()-7*86400000)},'orderItems.product':p._id}))fail('Review a purchased product within 7 days of delivery.');
  if(p.reviews.some(r=>String(r.user)===String(req.user._id)))fail('You have already reviewed this product.');
- const rating=numeric(req.body.rating,'Rating',1,5);if(!Number.isInteger(rating)||!req.body.comment?.trim())fail('Enter a rating and review.');
+ const rating=numeric(req.body.rating,'Rating',1,5);if(!Number.isInteger(rating)||(typeof req.body.comment!=='string'||!req.body.comment.trim()||req.body.comment.length>1000))fail('Enter a rating and review.');
  p.reviews.push({name:req.user.username,user:req.user._id,rating,comment:req.body.comment.trim()});
  p.numReviews=p.reviews.length;p.rating=p.reviews.reduce((s,r)=>s+r.rating,0)/p.numReviews;await p.save();res.status(201).json({message:'Review added.'});
 });

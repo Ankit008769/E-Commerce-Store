@@ -1,83 +1,9 @@
-import Category from "../models/categoryModel.js";
-import asyncHandler from "../middlewares/asyncHandler.js";
-
-const createCategory = asyncHandler(async (req, res) => {
-  try {
-    const { name } = req.body;
-
-    if (!name) {
-      return res.json({ error: "Name is required" });
-    }
-
-    const existingCategory = await Category.findOne({ name });
-
-    if (existingCategory) {
-      return res.json({ error: "Already exists" });
-    }
-
-    const category = await new Category({ name }).save();
-    res.json(category);
-  } catch (error) {
-    console.log(error);
-    return res.status(400).json(error);
-  }
-});
-
-const updateCategory = asyncHandler(async (req, res) => {
-  try {
-    const { name } = req.body;
-    const { categoryId } = req.params;
-
-    const category = await Category.findOne({ _id: categoryId });
-
-    if (!category) {
-      return res.status(404).json({ error: "Category not found" });
-    }
-
-    category.name = name;
-
-    const updatedCategory = await category.save();
-    res.json(updatedCategory);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-const removeCategory = asyncHandler(async (req, res) => {
-  try {
-    const removed = await Category.findByIdAndRemove(req.params.categoryId);
-    res.json(removed);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-const listCategory = asyncHandler(async (req, res) => {
-  try {
-    const all = await Category.find({});
-    res.json(all);
-  } catch (error) {
-    console.log(error);
-    return res.status(400).json(error.message);
-  }
-});
-
-const readCategory = asyncHandler(async (req, res) => {
-  try {
-    const category = await Category.findOne({ _id: req.params.id });
-    res.json(category);
-  } catch (error) {
-    console.log(error);
-    return res.status(400).json(error.message);
-  }
-});
-
-export {
-  createCategory,
-  updateCategory,
-  removeCategory,
-  listCategory,
-  readCategory,
-};
+import Category from '../models/categoryModel.js';
+import asyncHandler from '../middlewares/asyncHandler.js';
+import {fail} from '../utils/marketplace.js';
+const nameOf=req=>{const name=req.body.name;if(typeof name!=='string'||!name.trim()||name.length>100)fail('Enter a category name up to 100 characters.');return name.trim();};
+export const createCategory=asyncHandler(async(req,res)=>{const name=nameOf(req);if(await Category.exists({name}))fail('Category already exists.',409);res.status(201).json(await Category.create({name}));});
+export const updateCategory=asyncHandler(async(req,res)=>{const name=nameOf(req),category=await Category.findById(req.params.categoryId);if(!category)fail('Category not found.',404);category.name=name;res.json(await category.save());});
+export const removeCategory=asyncHandler(async(req,res)=>{const category=await Category.findByIdAndDelete(req.params.categoryId);if(!category)fail('Category not found.',404);res.json(category);});
+export const listCategory=asyncHandler(async(req,res)=>res.json(await Category.find({})));
+export const readCategory=asyncHandler(async(req,res)=>{const category=await Category.findById(req.params.id);if(!category)fail('Category not found.',404);res.json(category);});

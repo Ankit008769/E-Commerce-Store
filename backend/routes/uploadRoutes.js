@@ -1,11 +1,18 @@
-import path from 'path';
-import fs from 'fs';
-import crypto from 'crypto';
+import fs from 'node:fs/promises';
+import crypto from 'node:crypto';
 import express from 'express';
 import multer from 'multer';
 import {authenticate,authorizeStaff} from '../middlewares/authMiddleware.js';
+import asyncHandler from '../middlewares/asyncHandler.js';
+import {rateLimit} from '../utils/emailVerification.js';
+import {safePhoto} from '../utils/safePhoto.js';
+import {fail} from '../utils/marketplace.js';
 const r=express.Router();
-const storage=multer.diskStorage({destination(req,file,cb){fs.mkdirSync('uploads',{recursive:true});cb(null,'uploads');},filename(req,file,cb){cb(null,crypto.randomUUID()+path.extname(file.originalname).toLowerCase());}});
-const upload=multer({storage,limits:{fileSize:5*1024*1024},fileFilter(req,file,cb){const ok=/^\.(jpg|jpeg|png|webp)$/.test(path.extname(file.originalname).toLowerCase())&&/^image\/(jpeg|png|webp)$/.test(file.mimetype);cb(ok?null:new Error('Choose a JPG, PNG, or WebP photo.'),ok);}}).single('image');
-r.post('/',authenticate,authorizeStaff,(req,res)=>upload(req,res,e=>{if(e||!req.file)return res.status(400).json({message:e?.message||'Choose a photo.'});res.json({image:'/uploads/'+req.file.filename,message:'Photo uploaded.'});}));
+const upload=multer({storage:multer.memoryStorage(),limits:{fileSize:5*1024*1024,files:1,fields:0,parts:1}}).single('image');
+r.post('/',authenticate,authorizeStaff,asyncHandler(async(req,res,next)=>{await rateLimit('photo-upload',String(req.user._id),60);next();}),upload,asyncHandler(async(req,res)=>{
+ if(!req.file)fail('Choose a photo.');
+ const bytes=await safePhoto(req.file.buffer),filename=crypto.randomUUID()+'.webp';
+ await fs.mkdir('uploads',{recursive:true});await fs.writeFile('uploads/'+filename,bytes,{flag:'wx'});
+ res.json({image:'/uploads/'+filename,message:'Photo uploaded.'});
+}));
 export default r;

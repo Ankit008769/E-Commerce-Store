@@ -1,3 +1,4 @@
+import {securityHeaders,apiLimit,originGuard,inputGuard,safeError} from './middlewares/security.js';
 import printRoutes from './routes/printRoutes.js';
 import campusRoutes from './routes/campusRoutes.js';
 import {startFulfillment} from './utils/fulfillment.js';
@@ -23,6 +24,7 @@ dotenv.config();
 if (!process.env.MONGO_URI || !process.env.JWT_SECRET || process.env.JWT_SECRET === 'replace-with-a-long-random-secret') {
   throw new Error('Configure MONGO_URI and a private JWT_SECRET in .env before starting CampusCart.');
 }
+if(process.env.NODE_ENV==='production'&&process.env.JWT_SECRET.length<32)throw new Error('JWT_SECRET must contain at least 32 characters in production.');
 const port = process.env.PORT || 5010;
 
 await connectDB();
@@ -33,8 +35,11 @@ if(recovered)console.log(`Recovered ${recovered} interrupted checkouts.`);
 const app = express();
 app.set('trust proxy','loopback');
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.disable('x-powered-by');
+app.use(securityHeaders);
+app.use('/api',apiLimit,originGuard);
+app.use(express.json({limit:'64kb',strict:true}));
+app.use(inputGuard);
 app.use(cookieParser());
 
 app.get('/api/health', (req,res) => {
@@ -53,15 +58,19 @@ app.use("/api/orders", orderRoutes);
 
 
 const __dirname = path.resolve();
-app.use("/uploads", express.static(path.join(__dirname + "/uploads")));
+app.use('/uploads',(req,res,next)=>{
+ if(!/\.(?:jpe?g|png|webp|gif|avif)$/i.test(req.path))return res.status(404).json({message:'Not found'});
+ res.set('Content-Security-Policy',"default-src 'none'; sandbox");next();
+},express.static(path.join(__dirname,'uploads'),{dotfiles:'deny',index:false}));
 
 app.use(express.static(path.join(__dirname, "frontend/dist")));
 app.get("*", (req, res) => {
   if (req.path.startsWith("/api/") || req.path.startsWith("/uploads/")) return res.status(404).json({message: "Not found"});
   res.sendFile(path.join(__dirname, "frontend/dist/index.html"));
 });
-app.use((error, req, res, next) => res.status(error.status || 500).json({message: error.message}));
+app.use(safeError);
 
 startFulfillment();
 startOrderNotifications();
-app.listen(port, () => console.log(`Server running on port: ${port}`));
+const server=app.listen(port,process.env.HOST||'127.0.0.1',()=>console.log(`Server running on port: ${port}`));
+server.headersTimeout=10000;server.requestTimeout=60000;server.keepAliveTimeout=5000;server.maxRequestsPerSocket=1000;

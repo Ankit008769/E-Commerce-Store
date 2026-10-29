@@ -1,11 +1,13 @@
 import express from 'express';
-import formidable from 'express-formidable';
+import multer from 'multer';
+import {inputGuard} from '../middlewares/security.js';
+const fields=multer({limits:{files:0,fields:12,parts:12,fieldSize:12000}}).none();
 import * as c from '../controllers/productController.js';
 import {authenticate,authorizeStaff} from '../middlewares/authMiddleware.js';
 const r=express.Router();
-r.route('/').get(c.fetchProducts).post(authenticate,authorizeStaff,formidable(),c.addProduct);
+r.route('/').get(c.fetchProducts).post(authenticate,authorizeStaff,fields,inputGuard,c.addProduct);
 r.get('/manage',authenticate,authorizeStaff,c.manageProducts);r.get('/allproducts',c.fetchAllProducts);r.get('/top',c.fetchTopProducts);r.get('/new',c.fetchNewProducts);
 r.post('/filtered-products',c.filterProducts);r.post('/:id/reviews',authenticate,c.addProductReview);
 r.get('/:id/recommendations',c.fetchRecommendations);
-r.route('/:id').get(c.fetchProductById).put(authenticate,authorizeStaff,formidable(),c.updateProductDetails).delete(authenticate,authorizeStaff,c.removeProduct);
+r.route('/:id').get(c.fetchProductById).put(authenticate,authorizeStaff,fields,inputGuard,c.updateProductDetails).delete(authenticate,authorizeStaff,c.removeProduct);
 export default r;

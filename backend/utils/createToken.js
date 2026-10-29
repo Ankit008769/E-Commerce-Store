@@ -1,8 +1,9 @@
+import {randomUUID} from 'node:crypto';
 import jwt from "jsonwebtoken";
 
-const generateToken = (res, userId) => {
-  const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
-    expiresIn: "30d",
+const generateToken = (res, userId, version=0) => {
+  const token = jwt.sign({ userId, v:version }, process.env.JWT_SECRET, {
+    expiresIn: "7d", algorithm: "HS256", jwtid: randomUUID(),
   });
 
   // Set JWT as an HTTP-Only Cookie
@@ -10,7 +11,7 @@ const generateToken = (res, userId) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
-    maxAge: 30 * 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
   return token;

@@ -1,1 +1,2 @@
-export default fn => (req,res,next) => Promise.resolve(fn(req,res,next)).catch(e => res.status(e.status || (['ValidationError','CastError'].includes(e.name) || e.code === 11000 ? 400 : 500)).json({message:e.code === 11000 ? 'This value is already in use.' : e.message}));
+import {safeError} from './safeError.js';
+export default fn=>(req,res,next)=>Promise.resolve().then(()=>fn(req,res,next)).catch(e=>safeError(e,req,res,next));

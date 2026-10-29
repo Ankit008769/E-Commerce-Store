@@ -1,3 +1,4 @@
+import {loginLimit,profileLimit} from '../middlewares/security.js';
 import {challenge,requireCaptcha} from '../utils/captcha.js';
 import express from 'express';
 import User from '../models/userModel.js';
@@ -8,8 +9,8 @@ const r=express.Router();
 r.get('/captcha',challenge);
 r.route('/').post(requireCaptcha('signup'),c.createUser).get(authenticate,authorizeSuperAdmin,c.getAllUsers);
 r.post('/registration-otp',requireCaptcha('otp'),c.requestRegistrationOtp);
-r.post('/auth',requireCaptcha('login'),c.loginUser); r.post('/logout',c.logoutCurrentUser);
-r.route('/profile').get(authenticate,c.getCurrentUserProfile).put(authenticate,c.updateCurrentUserProfile);
+r.post('/auth',requireCaptcha('login'),loginLimit,c.loginUser); r.post('/logout',c.logoutCurrentUser);
+r.route('/profile').get(authenticate,c.getCurrentUserProfile).put(authenticate,profileLimit,c.updateCurrentUserProfile);
 r.post('/profile/verification-code',authenticate,requireCaptcha('otp'),c.requestProfileOtp);
 r.post('/profile/verify-email',authenticate,c.verifyProfileEmail);
 r.post('/staff',authenticate,authorizeSuperAdmin,c.createStaff);
