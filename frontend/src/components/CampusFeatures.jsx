@@ -1,0 +1,11 @@
+import {useEffect,useState} from 'react';
+import {useDispatch,useSelector} from 'react-redux';
+import {Link} from 'react-router-dom';
+import {api,useRemote} from '../Utils/marketplace';
+import {setFavorites} from '../redux/features/favorites/favoriteSlice';
+import ProductCard from '../pages/Products/ProductCard';
+import {toast} from 'react-toastify';
+export function FavoriteSync(){const user=useSelector(s=>s.auth.userInfo),dispatch=useDispatch();useEffect(()=>{let alive=true;if(user?.role==='customer')api('/api/campus/favorites').then(items=>{if(alive)dispatch(setFavorites(items));}).catch(()=>{});return()=>{alive=false;};},[user?._id,dispatch]);return null;}
+export function BuyAgain(){const user=useSelector(s=>s.auth.userInfo),items=useRemote(user?.role==='customer'?'/api/campus/buy-again':null);if(!items.data?.length)return null;return <section className="product-shelf"><div className="shelf-heading"><h2>Buy again</h2><Link to="/user-orders">Your orders →</Link></div><div className="product-grid quick-shelf">{items.data.slice(0,6).map(p=><ProductCard key={p._id} p={p}/>)}</div></section>;}
+export function ShopRating({id}){const rating=useRemote(id?'/api/campus/shops/'+id+'/ratings':null);return rating.data?.average!=null?<small>★ {rating.data.average.toFixed(1)} · {rating.data.count} verified order ratings</small>:null;}
+export function RateOrder({order,group}){const [rating,setRating]=useState(5),[comment,setComment]=useState(''),[busy,setBusy]=useState(false),[saved,setSaved]=useState(false);if(!order.isDelivered||!order.deliveredAt||Date.now()-new Date(order.deliveredAt).getTime()>7*86400000)return null;return <form onSubmit={async e=>{e.preventDefault();setBusy(true);try{await api('/api/campus/orders/'+order._id+'/rating',{method:'POST',body:{shopkeeper:group.shopkeeper,rating,comment}});setSaved(true);}catch(e){toast.error(e.message);}finally{setBusy(false);}}}>{saved?<p>Thanks for your rating.</p>:<><label>Rate this shop<select value={rating} onChange={e=>setRating(Number(e.target.value))}>{[5,4,3,2,1].map(n=><option key={n} value={n}>{n} stars</option>)}</select></label><label>Comment (optional)<textarea maxLength={1000} value={comment} onChange={e=>setComment(e.target.value)}/></label><button className="secondary" disabled={busy}>Submit rating</button></>}</form>;}

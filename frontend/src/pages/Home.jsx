@@ -1,4 +1,5 @@
 import {Link} from 'react-router-dom';
+import {BuyAgain} from '../components/CampusFeatures';
 import Shop from './Shop';
 export default function Home() {
   return <>
@@ -11,6 +12,6 @@ export default function Home() {
       <Link to="/shop?sort=low" className="quick-promo lemon"><div><h2>Little prices.<br/>Big everyday wins.</h2><p>Browse from lowest price first.</p><span>Find your favourites →</span></div><b aria-hidden="true">🧺</b></Link>
       <Link to="/shop" className="quick-promo lilac"><div><h2>Local shops.<br/>Cash at your door.</h2><p>Shopkeepers deliver your order.</p><span>Shop with COD →</span></div><b aria-hidden="true">🛵</b></Link>
     </div>
-    <Shop embedded/>
+    <BuyAgain/><Shop embedded/>
   </>;
 }

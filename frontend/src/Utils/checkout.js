@@ -1,4 +1,4 @@
-export const checkoutPayload=cart=>({orderItems:cart.cartItems.map(i=>({_id:i._id,qty:i.qty})).sort((a,b)=>a._id.localeCompare(b._id)),shippingAddress:cart.shippingAddress,paymentMethod:'COD'});
+export const checkoutPayload=(cart,options={})=>({...((options.couponCode||'').trim()?{couponCode:options.couponCode.trim()}:{}),...(options.deliveryMode==='rider'?{deliveryMode:'rider'}:{}),...(options.scheduledFor?{scheduledFor:new Date(options.scheduledFor+'+05:30').toISOString()}:{}),orderItems:cart.cartItems.map(i=>({_id:i._id,qty:i.qty})).sort((a,b)=>a._id.localeCompare(b._id)),shippingAddress:cart.shippingAddress,paymentMethod:'COD'});
 export function readCheckout(storage,owner,payload){
  try{const p=JSON.parse(storage.getItem('pendingCheckout'));return p?.owner===owner&&p.fingerprint===JSON.stringify(payload)&&typeof p.key==='string'?p:null;}catch{return null;}
 }

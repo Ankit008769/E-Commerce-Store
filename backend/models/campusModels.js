@@ -1,0 +1,16 @@
+import mongoose from 'mongoose';
+const {Schema,model}=mongoose,oid=Schema.Types.ObjectId;
+export const Coupon=model('Coupon',new Schema({code:{type:String,unique:true,required:true},shopkeeper:{type:oid,ref:'User'},kind:{type:String,enum:['fixed','percent'],required:true},value:Number,minimum:{type:Number,default:0},maxUses:{type:Number,required:true},oncePerCustomer:{type:Boolean,default:false},active:{type:Boolean,default:true},startsAt:Date,expiresAt:{type:Date,required:true},redemptions:{type:[{_id:false,order:oid,user:oid}],default:[]}}, {timestamps:true}));
+export const Rider=model('Rider',new Schema({_id:{type:oid,ref:'User'},upiId:{type:String,required:true},status:{type:String,enum:['pending','approved','rejected','suspended'],default:'pending'},online:{type:Boolean,default:false},reward:{type:Number,default:0},slots:{type:[String],default:[]},approvedBy:{type:oid,ref:'User'}},{timestamps:true}));
+export const DeliveryTask=model('DeliveryTask',new Schema({_id:String,order:{type:oid,ref:'Order',required:true},group:oid,shopkeeper:{type:oid,ref:'User'},shopName:String,pickupToken:String,status:{type:String,enum:['available','accepted','picked_up','delivered','cancelled'],default:'available'},rider:{type:oid,ref:'User'},riderName:String,slotToken:String,reward:{type:Number,default:0},acceptedAt:Date,pickedUpAt:Date,deliveredAt:Date,settledAt:Date,payout:{type:oid,ref:'RiderPayout'},codeAttempts:{type:Number,default:0},codeLockedUntil:Date},{timestamps:true}));
+export const RiderPayout=model('RiderPayout',new Schema({rider:{type:oid,ref:'User'},upiId:String,weekStart:Date,weekEnd:Date,status:{type:String,enum:['preparing','prepared','paid'],default:'preparing'},amount:{type:Number,default:0},reference:String,preparedBy:oid,paidBy:oid,paidAt:Date},{timestamps:true}));
+RiderPayout.schema.index({rider:1,weekStart:1},{unique:true});
+DeliveryTask.schema.index({rider:1,status:1});
+export const OrderRating=model('OrderRating',new Schema({order:oid,shopkeeper:{type:oid,ref:'User'},user:oid,rating:{type:Number,min:1,max:5},comment:String},{timestamps:true}));
+OrderRating.schema.index({order:1,shopkeeper:1},{unique:true});
+export const StockWatch=model('StockWatch',new Schema({user:{type:oid,ref:'User'},product:{type:oid,ref:'Product'},fulfilled:{type:Boolean,default:false}},{timestamps:true}));
+StockWatch.schema.index({user:1,product:1,fulfilled:1},{unique:true,partialFilterExpression:{fulfilled:false}});
+export const CampusAlert=model('CampusAlert',new Schema({_id:String,user:{type:oid,ref:'User'},kind:String,title:String,body:String,url:String,orderId:String},{timestamps:true}));
+CampusAlert.schema.index({user:1,createdAt:1,_id:1});
+export const PickupCounter=model('PickupCounter',new Schema({_id:String,value:{type:Number,default:0}}));
+export const PrintJob=model('PrintJob',new Schema({user:{type:oid,ref:'User'},shopkeeper:{type:oid,ref:'User'},fileId:oid,product:{type:oid,ref:'Product'},pages:Number,copies:Number,colour:Boolean,unitRate:Number,price:Number},{timestamps:true}));

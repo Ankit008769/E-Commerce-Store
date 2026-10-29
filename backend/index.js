@@ -1,3 +1,6 @@
+import printRoutes from './routes/printRoutes.js';
+import campusRoutes from './routes/campusRoutes.js';
+import {startFulfillment} from './utils/fulfillment.js';
 import notificationRoutes from './routes/notificationRoutes.js';
 import {startOrderNotifications} from './utils/orderPush.js';
 import {recoverCheckouts} from './utils/checkoutRecovery.js';
@@ -23,6 +26,7 @@ if (!process.env.MONGO_URI || !process.env.JWT_SECRET || process.env.JWT_SECRET 
 const port = process.env.PORT || 5010;
 
 await connectDB();
+await Promise.all(Object.values(mongoose.models).map(model=>model.init()));
 const recovered=await recoverCheckouts();
 if(recovered)console.log(`Recovered ${recovered} interrupted checkouts.`);
 
@@ -37,6 +41,8 @@ app.get('/api/health', (req,res) => {
   const ready=mongoose.connection.readyState===1;
   res.status(ready?200:503).json({status:ready?'ok':'unavailable'});
 });
+app.use("/api/print",printRoutes);
+app.use("/api/campus",campusRoutes);
 app.use("/api/notifications",notificationRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/category", categoryRoutes);
@@ -56,5 +62,6 @@ app.get("*", (req, res) => {
 });
 app.use((error, req, res, next) => res.status(error.status || 500).json({message: error.message}));
 
+startFulfillment();
 startOrderNotifications();
 app.listen(port, () => console.log(`Server running on port: ${port}`));

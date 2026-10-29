@@ -3,6 +3,7 @@ dotenv.config({path:'.env.push'});
 import webpush from 'web-push';
 import PushSubscription from '../models/pushSubscriptionModel.js';
 import Order from '../models/orderModel.js';
+import {CampusAlert} from '../models/campusModels.js';
 import User from '../models/userModel.js';
 export const pushConfigured=()=>!!(process.env.VAPID_PUBLIC_KEY&&process.env.VAPID_PRIVATE_KEY);
 export function validPushSubscription(value){
@@ -21,9 +22,12 @@ export async function dispatchOrderNotifications(){
   const lease=new Date(Date.now()+60000);
   const sub=await PushSubscription.findOneAndUpdate({_id:entry._id,$or:[{leaseUntil:{$exists:false}},{leaseUntil:{$lte:new Date()}}]},{$set:{leaseUntil:lease}},{new:true});if(!sub)continue;
   try{
-   if(!await User.exists({_id:sub.user,role:'shopkeeper',status:'active'})){await PushSubscription.deleteOne({_id:sub._id});continue;}
+   if(!await User.exists({_id:sub.user,role:{$in:['shopkeeper','customer']},status:'active'})){await PushSubscription.deleteOne({_id:sub._id});continue;}
+   const eventAfter=sub.alertCursorAt||sub.createdAt;
+   const event=await CampusAlert.findOne({user:sub.user,$or:[{createdAt:{$gt:eventAfter}},{createdAt:eventAfter,_id:{$gt:sub.alertCursorId||''}}]}).sort({createdAt:1,_id:1});
+   if(event){await sendPush(sub,{title:event.title,body:event.body,recipient:String(sub.user),kind:event.kind,url:event.url,orderId:event.orderId,alertId:event._id});await PushSubscription.updateOne({_id:sub._id,user:sub.user,leaseUntil:lease},{$set:{alertCursorAt:event.createdAt,alertCursorId:event._id}});}
    const after=sub.cursorId?{$or:[{createdAt:{$gt:sub.cursorAt}},{createdAt:sub.cursorAt,_id:{$gt:sub.cursorId}}]}:{createdAt:{$gt:sub.cursorAt}};
-   const orders=await Order.find({'shopOrders.shopkeeper':sub.user,...after}).sort({createdAt:1,_id:1}).limit(1);
+   const orders=await Order.find({workflowVersion:{$ne:2},'shopOrders.shopkeeper':sub.user,...after}).sort({createdAt:1,_id:1}).limit(1);
    for(const order of orders){
     const group=order.shopOrders.find(g=>String(g.shopkeeper)===String(sub.user));
     // Delivered groups need no new-order alert, but still advance the durable cursor.

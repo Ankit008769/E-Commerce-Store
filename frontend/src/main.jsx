@@ -10,6 +10,7 @@ import PrivateRoute from './components/PrivateRoute';
 import AdminRoute from './pages/Admin/AdminRoute';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
+import Rider from './pages/Rider';
 import Home from './pages/Home';
 import Shop from './pages/Shop';
 import Cart from './pages/Cart';
@@ -26,7 +27,7 @@ const router=createBrowserRouter([{element:<App/>,children:[
  {path:'/',element:<Home/>},{path:'/shop',element:<Shop/>},{path:'/product/:id',element:<ProductPage/>},
  {path:'/favorite',element:<Favorites/>},{path:'/cart',element:<Cart/>},{path:'/login',element:<Login/>},{path:'/register',element:<Register/>},
  {path:'/admin/login',element:<Login management/>},
- {element:<PrivateRoute/>,children:[{path:'/profile',element:<Profile/>},{path:'/user-orders',element:<UserOrder/>},{path:'/shipping',element:<Shipping/>},{path:'/placeorder',element:<PlaceOrder/>},{path:'/order/:id',element:<Order/>}]},
+ {element:<PrivateRoute/>,children:[{path:'/rider',element:<Rider/>},{path:'/profile',element:<Profile/>},{path:'/user-orders',element:<UserOrder/>},{path:'/shipping',element:<Shipping/>},{path:'/placeorder',element:<PlaceOrder/>},{path:'/order/:id',element:<Order/>}]},
  {path:'/admin',element:<AdminRoute/>,children:[{index:true,element:<Navigate to="dashboard" replace/>},{path:':section',element:<AdminDashboard/>},{path:'product/update/:id',element:<Navigate to="/admin/products" replace/>}]},
  {path:'*',element:<div className="empty-state"><h1>Page not found</h1><a href="/">Back to the shop</a></div>}
 ]}]);

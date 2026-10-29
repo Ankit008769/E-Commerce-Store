@@ -1,3 +1,4 @@
+import {Coupon} from '../models/campusModels.js';
 import CheckoutRequest from '../models/checkoutRequestModel.js';
 import Product from '../models/productModel.js';
 import Order from '../models/orderModel.js';
@@ -6,6 +7,7 @@ import {workerIdentity,ownerIsStopped} from './workerIdentity.js';
 export async function settleCheckout(claim){
  if(claim.owner?.token!==workerIdentity.token)throw new Error('Checkout belongs to another worker.');
  const committed=await Order.exists({_id:claim.orderId});
+ if(!committed&&claim.couponId)await Coupon.updateOne({_id:claim.couponId},{$pull:{redemptions:{order:claim.orderId}}});
  for(const item of claim.reservations||[]){
   const marker={requestId:claim._id,reservationId:String(claim.orderId)};
   await Product.updateOne({_id:item.product,stockReservations:{$elemMatch:{...marker,qty:item.qty}}},{

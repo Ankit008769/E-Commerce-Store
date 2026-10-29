@@ -17,7 +17,7 @@ test('CAPTCHA replay/expiry and shop-scoped durable notifications',{skip:!uri,ti
   assert.equal((await call('/api/users/auth',{...body,altcha:await proof('otp')})).status,400);assert.equal((await call('/api/users/auth',{...body,altcha:await proof('login',true)})).status,400);
   console.log('PASS CAPTCHA required, purpose bound, expiring, atomic single use, reordered-payload replay rejected');
   const mk=(name,role)=>User.create({username:name,email:name+'@test.local',password:'test-only',role,status:'active'});const a=await mk('shopa','shopkeeper'),b=await mk('shopb','shopkeeper'),buyer=await mk('buyer','customer');
-  assert.equal((await call('/api/notifications/key')).status,401);assert.equal((await call('/api/notifications/key',null,buyer)).status,403);
+  assert.equal((await call('/api/notifications/key')).status,401);assert.equal((await call('/api/notifications/key',null,buyer)).status,200);
   const keys={auth:'a'.repeat(22),p256dh:'b'.repeat(87)};
   assert.equal((await call('/api/notifications/subscribe',{endpoint:'https://127.0.0.1/private',keys},a)).status,400);
   const endpoint='https://fcm.googleapis.com/fcm/send/test-a',endpointB='https://fcm.googleapis.com/fcm/send/test-b';
@@ -32,6 +32,10 @@ test('CAPTCHA replay/expiry and shop-scoped durable notifications',{skip:!uri,ti
   sent=[];setPushSenderForTests(async(sub,payload)=>sent.push(payload));await dispatchOrderNotifications();assert.equal(sent.length,2);
   await User.updateOne({_id:a._id},{$set:{status:'blacklisted'}});await dispatchOrderNotifications();assert.equal(await Sub.countDocuments({user:a._id}),0);
   await Sub.updateOne({endpoint:endpointB},{$set:{cursorAt:new Date(Date.now()-60000),cursorId:''}});setPushSenderForTests(async()=>{const e=new Error('gone');e.statusCode=410;throw e;});await dispatchOrderNotifications();assert.equal(await Sub.countDocuments(),0);
+  assert.equal((await call('/api/notifications/pending',null,buyer)).status,403);
+  assert.equal((await call('/api/notifications/subscribe',{endpoint,keys},buyer)).status,200);
+  const {CampusAlert}=await import('../models/campusModels.js');await CampusAlert.create({_id:'stock:test',user:buyer._id,kind:'stock',title:'Back in stock',body:'Milk',url:'/product/'+new mongoose.Types.ObjectId()});sent=[];setPushSenderForTests(async(sub,payload)=>sent.push(payload));await dispatchOrderNotifications();assert.equal(sent.length,1);assert.equal(sent[0].recipient,String(buyer._id));assert.equal(sent[0].kind,'stock');await dispatchOrderNotifications();assert.equal(sent.length,1);
+  console.log('PASS customer restock push without access to shop pending orders');
   console.log('PASS shop isolation, endpoint safety, concurrent deduplication, durable retry, revoked users and expired subscriptions');
  }finally{await new Promise(resolve=>server.close(resolve));await mongoose.connection.dropDatabase();await mongoose.disconnect();}
 });
