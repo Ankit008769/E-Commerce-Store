@@ -29,7 +29,7 @@ test('two live backend processes preserve reservations and deduplicate across wo
   const cookie='jwt='+jwt.sign({userId:buyer._id},'crash-test-secret');
   const p=await Product.create({name:'Multi-worker A',price:10,image:'/uploads/test.jpg',shopkeeper:a._id,countInStock:5});
   const q=await Product.create({name:'Multi-worker B',price:20,image:'/uploads/test.jpg',shopkeeper:b._id,countInStock:7});
-  const payload={checkoutKey:'multi-worker-checkout',orderItems:[{_id:p._id,qty:2},{_id:q._id,qty:3}],paymentMethod:'COD',shippingAddress:{address:'Isolated multi-worker test',city:'Demo',postalCode:'123456',country:'India'}};
+  const payload={checkoutKey:'multi-worker-checkout',orderItems:[{_id:p._id,qty:2},{_id:q._id,qty:3}],paymentMethod:'COD',shippingAddress:{phone:'9000000000',address:'Isolated multi-worker test',city:'Demo',postalCode:'123456',country:'India'}};
   const post=async(port,body=payload)=>{const r=await fetch('http://127.0.0.1:'+port+'/api/orders',{method:'POST',headers:{Cookie:cookie,'Content-Type':'application/json'},body:JSON.stringify(body)});return {status:r.status,data:await r.json()};};
   const first=start('before-save'),firstReady=await first.wait('ready');
   const inFlight=post(firstReady.port).catch(e=>({networkError:e.message}));

@@ -1,3 +1,4 @@
+import {normalizePhone} from '../../shared/phone.js';
 import {applyCoupon,fulfillmentFor,reserveCoupon,newDeliveryCode} from '../utils/campusCheckout.js';
 import {withRiders} from '../utils/riderView.js';
 import {processFulfillment,updateOrderTotals} from '../utils/fulfillment.js';
@@ -34,6 +35,7 @@ export const quoteOrder=asyncHandler(async(req,res)=>res.json(visibleOrder(await
 export const createOrder=asyncHandler(async(req,res)=>{
  if(req.body.paymentMethod!=='COD')fail('Only Cash on Delivery is available.');
  const address={};for(const key of ['address','city','postalCode','country']){const v=req.body.shippingAddress?.[key];if(typeof v!=='string'||!v.trim()||v.length>300)fail('Enter a valid shipping '+key+'.');address[key]=v.trim();}
+ if(req.body.shippingAddress?.phone!==undefined){address.phone=normalizePhone(req.body.shippingAddress.phone);if(!address.phone)fail('Enter a valid 10-digit Indian mobile number.');}
  let claim;
  const key=req.body.checkoutKey;
  if(key!==undefined){
@@ -56,6 +58,7 @@ export const createOrder=asyncHandler(async(req,res)=>{
   claim=await CheckoutRequest.create({_id:String(req.user._id)+':legacy:'+new mongoose.Types.ObjectId(),owner:workerIdentity,fingerprint:'legacy',orderId:new mongoose.Types.ObjectId()});
  }
  try{
+  if(!address.phone)fail('A customer mobile number is required for delivery.');
   const priced=await priceCart(req.body,req.user);
   claim.couponId=priced.couponId;
   claim.reservations=priced.orderItems.map(i=>({product:i.product,qty:i.qty}));

@@ -12,7 +12,7 @@ const schema=new mongoose.Schema({
  workflowVersion:Number,couponCode:String,couponId:{type:mongoose.Schema.Types.ObjectId,ref:'Coupon'},discount:{type:Number,default:0},status:{type:String,enum:['scheduled','placed','completed','cancelled'],default:'placed'},
  user:{type:mongoose.Schema.Types.ObjectId,ref:'User',required:true},
  orderItems:[item],shopOrders:[group],
- shippingAddress:{address:{type:String,required:true},city:{type:String,required:true},postalCode:{type:String,required:true},country:{type:String,required:true}},
+ shippingAddress:{phone:{type:String},address:{type:String,required:true},city:{type:String,required:true},postalCode:{type:String,required:true},country:{type:String,required:true}},
  paymentMethod:{type:String,required:true},itemsPrice:Number,shippingPrice:Number,taxPrice:{type:Number,default:0},totalPrice:Number,
  isPaid:{type:Boolean,default:false},paidAt:Date,isDelivered:{type:Boolean,default:false},deliveredAt:Date
 },{timestamps:true});

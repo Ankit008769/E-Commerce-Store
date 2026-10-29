@@ -27,7 +27,7 @@ test('campus feature permissions, races, durable stock and private print jobs',{
   await Promise.all(Object.values(mongoose.models).map(m=>m.init()));
   const [student,other,r1,r2,admin,shop,shop2]=await Promise.all([create('student'),create('other'),create('rider1'),create('rider2'),create('admin','administrator'),create('booth4','shopkeeper'),create('4h','shopkeeper')]);
   const product=await Product.create({name:'Milk',image:'/uploads/test.jpg',price:40,countInStock:100,shopkeeper:shop._id});
-  const payload=(extra={})=>({paymentMethod:'COD',orderItems:[{_id:product._id,qty:1}],shippingAddress:{address:'Test hostel',city:'Hamirpur',postalCode:'177005',country:'India'},...extra});
+  const payload=(extra={})=>({paymentMethod:'COD',orderItems:[{_id:product._id,qty:1}],shippingAddress:{phone:'9000000000',address:'Test hostel',city:'Hamirpur',postalCode:'177005',country:'India'},...extra});
   let seq=0;const place=async(extra={})=>{const result=await call(student,'/api/orders','POST',payload({checkoutKey:'campus-features-order-'+(++seq),...extra}));assert.equal(result.status,201,JSON.stringify(result));return result.data;};
   for(const rider of [r1,r2]){assert.equal((await call(rider,'/api/campus/rider/apply','POST',{upiId:rider.username+'@upi'})).status,201);assert.equal((await call(admin,'/api/campus/admin/riders/'+rider._id,'PUT',{status:'approved',reward:20})).status,200);assert.equal((await call(rider,'/api/campus/rider/online','PUT',{online:true})).status,200);}
   assert.equal((await call(student,'/api/campus/admin/riders')).status,403);

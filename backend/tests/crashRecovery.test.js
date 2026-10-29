@@ -30,7 +30,7 @@ test('hard process termination restores reservations on restart and preserves co
   for(const crashPoint of ['before-save','after-save']){
    const p=await Product.create({name:'Crash A',price:10,image:'/uploads/test.jpg',shopkeeper:a._id,countInStock:5});
    const q=await Product.create({name:'Crash B',price:20,image:'/uploads/test.jpg',shopkeeper:b._id,countInStock:7});
-   const payload={checkoutKey:'hard-crash-'+crashPoint,orderItems:[{_id:p._id,qty:2},{_id:q._id,qty:3}],paymentMethod:'COD',shippingAddress:{address:'Isolated crash test',city:'Demo',postalCode:'123456',country:'India'}};
+   const payload={checkoutKey:'hard-crash-'+crashPoint,orderItems:[{_id:p._id,qty:2},{_id:q._id,qty:3}],paymentMethod:'COD',shippingAddress:{phone:'9000000000',address:'Isolated crash test',city:'Demo',postalCode:'123456',country:'India'}};
    const post=async port=>{const r=await fetch('http://127.0.0.1:'+port+'/api/orders',{method:'POST',headers:{Cookie:cookie,'Content-Type':'application/json'},body:JSON.stringify(payload)});return {status:r.status,data:await r.json()};};
    const crashing=start(crashPoint),ready=await crashing.wait('ready');
    const disconnected=post(ready.port).then(()=>false,()=>true);
