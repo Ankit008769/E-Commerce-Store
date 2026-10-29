@@ -1,3 +1,4 @@
+import {itemNote} from '../utils/itemNote.js';
 import {normalizePhone} from '../../shared/phone.js';
 import {applyCoupon,fulfillmentFor,reserveCoupon,newDeliveryCode} from '../utils/campusCheckout.js';
 import {withRiders} from '../utils/riderView.js';
@@ -13,8 +14,8 @@ import asyncHandler from '../middlewares/asyncHandler.js';
 import {roleOf,fail,numeric,money,deliveryPrice,lateDeduction,visibleOrder} from '../utils/marketplace.js';
 async function priceCart(body,user) {
  if(!Array.isArray(body.orderItems)||!body.orderItems.length||body.orderItems.length>100)fail('Add between 1 and 100 products.');
- const amounts=new Map();
- for(const i of body.orderItems){const qty=numeric(i.qty,'Quantity',1,100000);if(!Number.isInteger(qty))fail('Quantity must be a whole number.');const id=String(i._id);amounts.set(id,(amounts.get(id)||0)+qty);}
+ const amounts=new Map(),notes=new Map();
+ for(const i of body.orderItems){const qty=numeric(i.qty,'Quantity',1,100000);if(!Number.isInteger(qty))fail('Quantity must be a whole number.');const id=String(i._id);const note=itemNote(i.note);if(notes.has(id)&&notes.get(id)!==note)fail('Use one set of instructions per product.');notes.set(id,note);amounts.set(id,(amounts.get(id)||0)+qty);}
  const products=await Product.find({_id:{$in:[...amounts.keys()]}}).populate('shopkeeper');
  if(products.length!==amounts.size)fail('A product is no longer available.');
  const groups=new Map();
@@ -25,7 +26,7 @@ async function priceCart(body,user) {
   if(qty>p.countInStock)fail((p.name||'This item')+' does not have enough stock.');
   const id=String(shop._id);
   if(!groups.has(id))groups.set(id,{...fulfillmentFor(body,shop),shopkeeper:shop._id,shopName:shop.shopName||shop.username,items:[],minimumOrder:shop.deliveryPolicy.minimumOrder,deliveryCharge:shop.deliveryPolicy.deliveryCharge,deliveryMinutes:shop.deliveryPolicy.deliveryMinutes,latePenalty:shop.deliveryPolicy.latePenalty});
-  groups.get(id).items.push({product:p._id,name:p.name||'Shop item',image:p.image,qty,price:p.price});
+  groups.get(id).items.push({...(notes.get(String(p._id))?{note:notes.get(String(p._id))}:{}),product:p._id,name:p.name||'Shop item',image:p.image,qty,price:p.price});
  }
  const shopOrders=[...groups.values()].map(g=>{const itemsPrice=money(g.items.reduce((s,i)=>s+i.price*i.qty,0));return {...g,itemsPrice,shippingPrice:deliveryPrice(itemsPrice,g)};});
  const itemsPrice=money(shopOrders.reduce((s,g)=>s+g.itemsPrice,0)),shippingPrice=money(shopOrders.reduce((s,g)=>s+g.shippingPrice,0));
@@ -41,7 +42,7 @@ export const createOrder=asyncHandler(async(req,res)=>{
  if(key!==undefined){
   if(typeof key!=='string'||!/^[a-zA-Z0-9_-]{16,100}$/.test(key))fail('Invalid checkout ID.');
   if(!Array.isArray(req.body.orderItems))fail('Add products to your cart.');
-  const items=req.body.orderItems.map(i=>[String(i._id),Number(i.qty)]).sort((a,b)=>a[0].localeCompare(b[0]));
+  const items=req.body.orderItems.map(i=>{const note=itemNote(i.note);return [String(i._id),Number(i.qty),...(note?[note]:[])];}).sort((a,b)=>a[0].localeCompare(b[0]));
   const fingerprint=createHash('sha256').update(JSON.stringify({items,address,paymentMethod:'COD',...(req.body.couponCode?{couponCode:String(req.body.couponCode).trim().toUpperCase()}:{}),...(req.body.scheduledFor?{scheduledFor:req.body.scheduledFor}:{}),...(req.body.deliveryMode==='rider'?{deliveryMode:'rider'}:{})})).digest('hex');
   const claimId=String(req.user._id)+':'+key;
   try{claim=await CheckoutRequest.create({_id:claimId,owner:workerIdentity,fingerprint,orderId:new mongoose.Types.ObjectId()});}

@@ -108,3 +108,5 @@ dialog::backdrop { background:#0007;backdrop-filter:blur(2px); }
 .product-photo-credits p{padding:12px;background:#f7f9f6;border-radius:10px}
 .product-photo-credits a{text-decoration:underline}
 @media(max-width:850px){.customer-app .detail-layout{grid-template-columns:minmax(0,1fr);gap:18px}.customer-app .detail-image{max-height:360px}.customer-app .detail-layout .panel{padding:0}.customer-app .detail-layout h1{font-size:30px}}
+
+.item-instructions{margin:16px 0;min-width:0;max-width:100%}.item-instructions label{font-size:13px!important;max-width:100%!important}.item-instructions textarea{resize:vertical;width:100%;min-height:70px}.item-instructions small{display:block;font-size:11px;line-height:1.5}.item-note{display:block;color:#52674e;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere;margin-top:6px}.cart-item-details{min-width:0;flex:1}.cart-row .item-instructions{max-width:480px}.drawer-item .item-instructions{margin:10px 0}.total-row>span{min-width:0;overflow-wrap:anywhere}

@@ -72,11 +72,16 @@ test('API permissions, per-shop COD pricing, blacklisting and idempotent deliver
  r=await call(shop2,'/api/products/manage');check('existing blacklisted session blocked',()=>assert.equal(r.status,403));
  r=await call(buyer,'/api/orders/quote','POST',{orderItems:[{_id:p2._id,qty:1}]});check('blacklisted shop cannot be ordered from',()=>assert.equal(r.status,400));
  await call(sa,'/api/users/'+shop2._id,'PUT',{status:'active'});
- const payload={orderItems:[{_id:p._id,qty:2,price:1},{_id:p2._id,qty:1,price:1}],shippingAddress:{phone:'9000000000',address:'Hostel A, Room 12',city:'Pune',postalCode:'411001',country:'India'},paymentMethod:'COD'};
+ const payload={orderItems:[{_id:p._id,qty:2,price:1,note:'  Extra cheese  '},{_id:p2._id,qty:1,price:1,note:'Less spicy'}],shippingAddress:{phone:'9000000000',address:'Hostel A, Room 12',city:'Pune',postalCode:'411001',country:'India'},paymentMethod:'COD'};
  for(const phone of [undefined,'','123','1234567890','9000000000<script>',9000000000]){
   const invalid=await call(buyer,'/api/orders','POST',{...payload,shippingAddress:{...payload.shippingAddress,phone}});assert.equal(invalid.status,400);
  }
  assert.equal((await Product.findById(p._id)).countInStock,10);console.log('PASS missing/invalid phone rejected without stock changes');
+ for(const note of [null,{},['cheese'],'x'.repeat(301),'<img src=x onerror=alert(1)>','hello\u0000','hello\u202e']){
+  const bad={...payload,orderItems:[{_id:p._id,qty:1,note}]};assert.equal((await call(buyer,'/api/orders/quote','POST',bad)).status,400);assert.equal((await call(buyer,'/api/orders','POST',bad)).status,400);
+ }
+ assert.equal((await call(buyer,'/api/orders','POST',{...payload,orderItems:[{_id:p._id,qty:1,note:'cheese'},{_id:p._id,qty:1,note:'no cheese'}]})).status,400);
+ assert.equal((await Product.findById(p._id)).countInStock,10);console.log('PASS instructions reject HTML, controls, non-text, oversized and conflicting notes without changing stock');
  r=await call(buyer,'/api/orders/quote','POST',payload);check('server prices and independent threshold fees',()=>{assert.equal(r.data.totalPrice,530);assert.equal(r.data.shopOrders.length,2);assert.equal(r.data.shopOrders[0].latePenalty,undefined);});
  r=await call(buyer,'/api/orders','POST',{...payload,paymentMethod:'PayPal'});check('online payment rejected',()=>assert.equal(r.status,400));
  r=await call(buyer,'/api/orders','POST',payload);assert.equal(r.status,201);const id=r.data._id;
@@ -84,7 +89,7 @@ test('API permissions, per-shop COD pricing, blacklisting and idempotent deliver
  const ownHistory=await call(buyer,'/api/orders/mine'),otherHistory=await call(other,'/api/orders/mine');assert(ownHistory.data.some(o=>o._id===id));assert.equal(otherHistory.data.length,0);console.log('PASS customer order history remains scoped to the purchasing account');
  assert.equal((await Product.findById(p._id)).countInStock,8);console.log('PASS stock reserved');
  r=await call(other,'/api/orders/'+id);check('other customer cannot read order',()=>assert.equal(r.status,403));
- r=await call(shop,'/api/orders/'+id);check('shop only receives its items and total',()=>{assert.equal(r.data.shopOrders.length,1);assert.equal(r.data.shippingAddress.phone,'+919000000000');assert.equal(r.data.totalPrice,230);assert.equal(r.data.orderItems.length,1);assert.equal(r.data.shopOrders[0].deduction,undefined);});
+ r=await call(shop,'/api/orders/'+id);check('shop only receives its items and total',()=>{assert.equal(r.data.shopOrders.length,1);assert.equal(r.data.shippingAddress.phone,'+919000000000');assert.equal(r.data.orderItems[0].note,'Extra cheese');assert(!JSON.stringify(r.data).includes('Less spicy'));assert.equal(r.data.totalPrice,230);assert.equal(r.data.orderItems.length,1);assert.equal(r.data.shopOrders[0].deduction,undefined);});
  const order=await Order.findById(id),g=order.shopOrders.find(g=>String(g.shopkeeper)===String(shop._id));
  r=await call(shop2,'/api/orders/'+id+'/shops/'+g._id+'/deliver','PUT');check('cross-shop delivery rejected',()=>assert.equal(r.status,403));
  g.deadline=new Date(Date.now()-60000);await order.save();
@@ -97,13 +102,14 @@ test('API permissions, per-shop COD pricing, blacklisting and idempotent deliver
  r=await call(buyer,'/api/orders/'+id);check('all delivered groups complete COD order',()=>{assert.equal(r.data.isPaid,true);assert.equal(r.data.isDelivered,true);});
 
  const limited=await Product.create({name:'Checkout retry test',price:10,image:'/uploads/test.jpg',shopkeeper:shop._id,countInStock:3});
- const request={...payload,orderItems:[{_id:limited._id,qty:1}],checkoutKey:'checkout-regression-001'};
+ const request={...payload,orderItems:[{_id:limited._id,qty:1,note:'Extra cheese'}],checkoutKey:'checkout-regression-001'};
  const parallel=await Promise.all(Array.from({length:8},()=>call(buyer,'/api/orders','POST',request)));
  assert.equal(parallel.filter(r=>r.status===201).length,1);assert(parallel.every(r=>[200,201,409].includes(r.status)));
  const created=parallel.find(r=>r.status===201).data;
  assert.equal(await Order.countDocuments({'orderItems.product':limited._id}),1);assert.equal((await Product.findById(limited._id)).countInStock,2);
  const replay=await call(buyer,'/api/orders','POST',request);assert.equal(replay.status,200);assert.equal(replay.data._id,created._id);
  const samePhone=await call(buyer,'/api/orders','POST',{...request,shippingAddress:{...request.shippingAddress,phone:'+91 90000 00000'}});assert.equal(samePhone.status,200);assert.equal(samePhone.data._id,created._id);
+ const changedNote=await call(buyer,'/api/orders','POST',{...request,orderItems:[{...request.orderItems[0],note:'No cheese'}]});assert.equal(changedNote.status,409);assert.equal(replay.data.orderItems[0].note,'Extra cheese');
  const changedPhone=await call(buyer,'/api/orders','POST',{...request,shippingAddress:{...request.shippingAddress,phone:'9000000001'}});assert.equal(changedPhone.status,409);
  const altered=await call(buyer,'/api/orders','POST',{...request,orderItems:[{_id:limited._id,qty:2}]});assert.equal(altered.status,409);
  const separateUser=await call(other,'/api/orders','POST',request);assert.equal(separateUser.status,201);assert.notEqual(separateUser.data._id,created._id);
